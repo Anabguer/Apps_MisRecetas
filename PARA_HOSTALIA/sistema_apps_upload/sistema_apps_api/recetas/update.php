@@ -4,6 +4,12 @@
 // Endpoint: https://colisan/sistema_apps_api/recetas/update.php
 // =====================================================
 
+// Debug logging
+error_log("UPDATE.PHP - Inicio");
+error_log("UPDATE.PHP - Method: " . $_SERVER['REQUEST_METHOD']);
+error_log("UPDATE.PHP - POST data: " . print_r($_POST, true));
+error_log("UPDATE.PHP - FILES data: " . print_r($_FILES, true));
+
 require_once '../config.php';
 
 // Solo permitir POST (para FormData)
