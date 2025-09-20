@@ -71,9 +71,9 @@ define('WEB_BASE_URL', 'https://colisan.com/sistema_apps_upload/');
 sistema_apps_upload/ (RAÍZ)
 ├── index.html                    ← Selector de aplicaciones
 ├── router.html                   ← Router inteligente
-├── app_recetas.html             ← Aplicación Recetas
-├── app_puzzle.html              ← Aplicación Puzzle (nueva)
-├── app_memory.html              ← Aplicación Memory (nueva)
+├── app_recetas.html             ← Aplicación Recetas (ESPECÍFICA)
+├── app_puzzle.html              ← Aplicación Puzzle (ESPECÍFICA - nueva)
+├── app_memory.html              ← Aplicación Memory (ESPECÍFICA - nueva)
 ├── sistema_apps_api/
 │   ├── recetas/                 ← APIs Recetas
 │   │   ├── config.php
@@ -264,26 +264,39 @@ $stmt = $pdo->prepare("
 // Las carpetas se crean automáticamente por usuario
 ```
 
-### **PASO 7: 🌐 CREAR APLICACIÓN WEB**
+### **PASO 7: 🌐 CREAR APLICACIÓN WEB ESPECÍFICA**
 
 ```html
-<!-- app_puzzle.html -->
+<!-- app_puzzle.html - ARCHIVO ESPECÍFICO PARA PUZZLE -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Puzzle Game</title>
-    <!-- CSS específico del puzzle -->
+    <style>
+        /* CSS específico del puzzle */
+        /* Copiar estructura base de app_recetas.html y adaptar */
+    </style>
 </head>
 <body>
+    <!-- HTML específico del puzzle -->
+    
     <script>
-        // Configuración API
+        // Configuración API específica
         const API_BASE = 'https://colisan.com/sistema_apps_upload/sistema_apps_api/puzzle/';
         
-        // Resto de lógica específica del puzzle
+        // Lógica específica del puzzle
+        // Copiar funciones base de app_recetas.html y adaptar
     </script>
 </body>
 </html>
 ```
+
+**📝 IMPORTANTE:**
+- **CADA aplicación** tiene su archivo HTML específico
+- **NO reutilizar** app_recetas.html para otras apps
+- **Copiar estructura base** y adaptar para cada aplicación
 
 ### **PASO 8: 🎯 ACTUALIZAR ROUTER**
 
@@ -358,6 +371,11 @@ App Web:   https://colisan.com/sistema_apps_upload/app_CODIGO.html
 API Auth:  https://colisan.com/sistema_apps_upload/sistema_apps_api/CODIGO/auth.php
 API List:  https://colisan.com/sistema_apps_upload/sistema_apps_api/CODIGO/list.php
 Uploads:   https://colisan.com/sistema_apps_upload/sistema_apps_upload/CODIGO/
+
+EJEMPLOS ESPECÍFICOS:
+- Recetas: https://colisan.com/sistema_apps_upload/app_recetas.html
+- Puzzle:  https://colisan.com/sistema_apps_upload/app_puzzle.html
+- Memory:  https://colisan.com/sistema_apps_upload/app_memory.html
 ```
 
 ---
