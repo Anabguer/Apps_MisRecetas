@@ -4,14 +4,14 @@
 // Endpoint: https://colisan/sistema_apps_api/recetas/delete.php
 // =====================================================
 
-require_once '../config.php';
+require_once 'config.php';
 
-// Solo permitir DELETE
-if ($_SERVER['REQUEST_METHOD'] !== 'DELETE') {
+// Solo permitir POST (como update.php y create_new.php)
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     errorResponse('Método no permitido', 405);
 }
 
-// Obtener datos del JSON
+// Obtener datos del JSON (igual que antes)
 $input = json_decode(file_get_contents('php://input'), true);
 
 if (!$input) {
@@ -19,10 +19,15 @@ if (!$input) {
 }
 
 // Validar campos requeridos
-validateInput($input, ['token', 'recipe_id']);
+$requiredFields = ['token', 'receta_id'];
+foreach ($requiredFields as $field) {
+    if (empty($input[$field])) {
+        errorResponse("Campo requerido: $field");
+    }
+}
 
 $token = $input['token'];
-$recipeId = $input['recipe_id'];
+$recipeId = $input['receta_id'];
 
 // Decodificar token
 $decoded = base64_decode($token);
