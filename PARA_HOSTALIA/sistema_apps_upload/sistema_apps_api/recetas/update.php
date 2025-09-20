@@ -74,33 +74,42 @@ try {
     $imagenUrl = $input['imagen_url'] ?? '';  // URL existente por defecto
     $videoUrl = $input['video_url'] ?? '';    // URL existente por defecto
     
+    // Limpiar nombre de receta para usar en archivo
+    $nombreLimpio = preg_replace('/[^a-zA-Z0-9áéíóúñÁÉÍÓÚÑ\s]/', '', $input['nombre']);
+    $nombreLimpio = preg_replace('/\s+/', '-', trim($nombreLimpio));
+    $nombreLimpio = strtolower($nombreLimpio);
+    
     // Procesar imagen nueva si existe
     if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = '../../sistema_apps_upload/recetas/';
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0777, true);
+        $imageUploadDir = '../../sistema_apps_upload/recetas/images/';
+        if (!is_dir($imageUploadDir)) {
+            mkdir($imageUploadDir, 0777, true);
         }
         
-        $imageName = uniqid() . '_' . $_FILES['imagen']['name'];
-        $imagePath = $uploadDir . $imageName;
+        // Nombre: tipo-nombre.extension
+        $extension = strtolower(pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION));
+        $imageName = strtolower($input['tipo']) . '-' . $nombreLimpio . '.' . $extension;
+        $imagePath = $imageUploadDir . $imageName;
         
         if (move_uploaded_file($_FILES['imagen']['tmp_name'], $imagePath)) {
-            $imagenUrl = 'https://colisan.com/sistema_apps_upload/sistema_apps_upload/recetas/' . $imageName;
+            $imagenUrl = 'https://colisan.com/sistema_apps_upload/sistema_apps_upload/recetas/images/' . $imageName;
         }
     }
     
     // Procesar video nuevo si existe
     if (isset($_FILES['video']) && $_FILES['video']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = '../../sistema_apps_upload/recetas/';
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0777, true);
+        $videoUploadDir = '../../sistema_apps_upload/recetas/videos/';
+        if (!is_dir($videoUploadDir)) {
+            mkdir($videoUploadDir, 0777, true);
         }
         
-        $videoName = uniqid() . '_' . $_FILES['video']['name'];
-        $videoPath = $uploadDir . $videoName;
+        // Nombre: tipo-nombre.extension
+        $extension = strtolower(pathinfo($_FILES['video']['name'], PATHINFO_EXTENSION));
+        $videoName = strtolower($input['tipo']) . '-' . $nombreLimpio . '.' . $extension;
+        $videoPath = $videoUploadDir . $videoName;
         
         if (move_uploaded_file($_FILES['video']['tmp_name'], $videoPath)) {
-            $videoUrl = 'https://colisan.com/sistema_apps_upload/sistema_apps_upload/recetas/' . $videoName;
+            $videoUrl = 'https://colisan.com/sistema_apps_upload/sistema_apps_upload/recetas/videos/' . $videoName;
         }
     }
     
