@@ -321,7 +321,7 @@
                     extraIcons += '<span style="color:#22c55e;">💚</span> ';
                 }
                 if (receta.receta_video && receta.receta_video.trim() !== '') {
-                    extraIcons += '<span style="color:#3b82f6;">🎥</span> ';
+                    extraIcons += '<span style="color:#3b82f6;cursor:pointer;" onclick="event.stopPropagation(); window.open(\'' + receta.receta_video + '\', \'_blank\');" title="Ver video">🎥</span> ';
                 }
                 
                 card.innerHTML = 

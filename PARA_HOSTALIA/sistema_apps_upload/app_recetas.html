@@ -782,7 +782,7 @@
                     estadoIconos += ' 💚';
                 }
                 if (receta.receta_video && receta.receta_video.trim() !== '') {
-                    estadoIconos += ' 📹';
+                    estadoIconos += ` <span style="cursor:pointer;" onclick="event.stopPropagation(); window.open('${receta.receta_video}', '_blank');" title="Ver video">📹</span>`;
                 }
                 
                 // Crear contenido de la card SIN innerHTML problemático
