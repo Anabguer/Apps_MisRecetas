@@ -975,6 +975,31 @@
         
         // ===== FUNCIONES DE IMAGEN/VIDEO =====
         
+        // Funciones para validar antes de abrir selector
+        function openNewImageSelector() {
+            const nombre = document.getElementById('newRecipeName').value.trim();
+            const tipo = document.getElementById('newRecipeType').value;
+            
+            if (!nombre || !tipo) {
+                alert('⚠️ Debes completar el NOMBRE y seleccionar un TIPO antes de subir la imagen');
+                return;
+            }
+            
+            document.getElementById('newRecipeImage').click();
+        }
+        
+        function openNewVideoSelector() {
+            const nombre = document.getElementById('newRecipeName').value.trim();
+            const tipo = document.getElementById('newRecipeType').value;
+            
+            if (!nombre || !tipo) {
+                alert('⚠️ Debes completar el NOMBRE y seleccionar un TIPO antes de subir el video');
+                return;
+            }
+            
+            document.getElementById('newRecipeVideo').click();
+        }
+        
         function handleNewImageUpload(input) {
             // Validar que existan nombre y tipo antes de subir imagen
             const nombre = document.getElementById('newRecipeName').value.trim();
@@ -1036,16 +1061,16 @@
             if (imageUrl && imageUrl.trim() !== '') {
                 // Mostrar imagen con botones
                 container.innerHTML = `
-                    <div class="image-preview-container" onclick="document.getElementById('newRecipeImage').click()">
+                    <div class="image-preview-container" onclick="openNewImageSelector()">
                         <img src="${imageUrl}" alt="Vista previa" class="image-preview-img">
                         <button type="button" onclick="event.stopPropagation(); removeNewImage()" class="image-remove-btn" title="Eliminar imagen">✕</button>
-                        <button type="button" onclick="event.stopPropagation(); document.getElementById('newRecipeImage').click()" class="image-change-btn">📁 Cambiar</button>
+                        <button type="button" onclick="event.stopPropagation(); openNewImageSelector()" class="image-change-btn">📁 Cambiar</button>
                     </div>
                 `;
             } else {
                 // Mostrar botón de seleccionar
                 container.innerHTML = `
-                    <div class="image-no-preview" onclick="document.getElementById('newRecipeImage').click()">
+                    <div class="image-no-preview" onclick="openNewImageSelector()">
                         <div class="image-no-preview-button">
                             <span class="image-no-preview-icon">📷</span>
                             <span class="image-no-preview-text">Seleccionar imagen</span>
@@ -1064,7 +1089,7 @@
                     <div class="image-no-preview video-container" style="background: #f0f9ff; border-color: #3b82f6;">
                         <div style="display: flex; gap: 0.5rem;">
                             <button type="button" onclick="viewNewVideo()" class="video-btn" style="background: #10b981; color: white;">👁️ Ver</button>
-                            <button type="button" onclick="document.getElementById('newRecipeVideo').click()" class="video-btn video-btn-change">📁 Cambiar</button>
+                            <button type="button" onclick="openNewVideoSelector()" class="video-btn video-btn-change">📁 Cambiar</button>
                             <button type="button" onclick="removeNewVideo()" class="video-btn video-btn-remove">✕ Quitar</button>
                         </div>
                     </div>
@@ -1072,7 +1097,7 @@
             } else {
                 // Mostrar botón de seleccionar
                 container.innerHTML = `
-                    <div class="image-no-preview" onclick="document.getElementById('newRecipeVideo').click()">
+                    <div class="image-no-preview" onclick="openNewVideoSelector()">
                         <div class="image-no-preview-button">
                             <span class="image-no-preview-icon">🎥</span>
                             <span class="image-no-preview-text">Seleccionar video</span>
@@ -1101,6 +1126,31 @@
         }
         
         // ===== FUNCIONES EDICIÓN IMAGEN/VIDEO =====
+        
+        // Funciones para validar antes de abrir selector (EDITAR)
+        function openEditImageSelector() {
+            const nombre = document.getElementById('editRecipeName').value.trim();
+            const tipo = document.getElementById('editRecipeType').value;
+            
+            if (!nombre || !tipo) {
+                alert('⚠️ Debes completar el NOMBRE y seleccionar un TIPO antes de cambiar la imagen');
+                return;
+            }
+            
+            document.getElementById('editRecipeImage').click();
+        }
+        
+        function openEditVideoSelector() {
+            const nombre = document.getElementById('editRecipeName').value.trim();
+            const tipo = document.getElementById('editRecipeType').value;
+            
+            if (!nombre || !tipo) {
+                alert('⚠️ Debes completar el NOMBRE y seleccionar un TIPO antes de cambiar el video');
+                return;
+            }
+            
+            document.getElementById('editRecipeVideo').click();
+        }
         
         function handleEditImageUpload(input) {
             // Validar que existan nombre y tipo antes de subir imagen
@@ -1158,15 +1208,15 @@
             
             if (imageUrl && imageUrl.trim() !== '') {
                 container.innerHTML = `
-                    <div class="image-preview-container" onclick="document.getElementById('editRecipeImage').click()">
+                    <div class="image-preview-container" onclick="openEditImageSelector()">
                         <img src="${imageUrl}" alt="Vista previa" class="image-preview-img">
                         <button type="button" onclick="event.stopPropagation(); removeEditImage()" class="image-remove-btn" title="Eliminar imagen">✕</button>
-                        <button type="button" onclick="event.stopPropagation(); document.getElementById('editRecipeImage').click()" class="image-change-btn">📁 Cambiar</button>
+                        <button type="button" onclick="event.stopPropagation(); openEditImageSelector()" class="image-change-btn">📁 Cambiar</button>
                     </div>
                 `;
             } else {
                 container.innerHTML = `
-                    <div class="image-no-preview" onclick="document.getElementById('editRecipeImage').click()">
+                    <div class="image-no-preview" onclick="openEditImageSelector()">
                         <div class="image-no-preview-button">
                             <span class="image-no-preview-icon">📷</span>
                             <span class="image-no-preview-text">Seleccionar imagen</span>
@@ -1185,14 +1235,14 @@
                     <div class="image-no-preview video-container" style="background: #f0f9ff; border-color: #3b82f6;">
                         <div style="display: flex; gap: 0.5rem;">
                             <button type="button" onclick="viewEditVideo()" class="video-btn" style="background: #10b981; color: white;">👁️ Ver</button>
-                            <button type="button" onclick="document.getElementById('editRecipeVideo').click()" class="video-btn video-btn-change">📁 Cambiar</button>
+                            <button type="button" onclick="openEditVideoSelector()" class="video-btn video-btn-change">📁 Cambiar</button>
                             <button type="button" onclick="removeEditVideo()" class="video-btn video-btn-remove">✕ Quitar</button>
                         </div>
                     </div>
                 `;
             } else {
                 container.innerHTML = `
-                    <div class="image-no-preview" onclick="document.getElementById('editRecipeVideo').click()">
+                    <div class="image-no-preview" onclick="openEditVideoSelector()">
                         <div class="image-no-preview-button">
                             <span class="image-no-preview-icon">🎥</span>
                             <span class="image-no-preview-text">Seleccionar video</span>
