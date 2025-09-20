@@ -600,28 +600,6 @@
 </head>
 <body>
     <!-- TEST MOBILE DEBUG -->
-    <div style="position: fixed; top: 0; left: 0; right: 0; z-index: 9999; background: yellow; color: black; padding: 5px; font-size: 10px; border-bottom: 2px solid red;">
-        <div id="mobileInfo">Cargando...</div>
-        <div style="margin-top: 5px;">
-            <input type="file" id="testMobile1" accept="image/*" onchange="document.getElementById('result1').innerHTML='TEST1: ' + this.files[0].name" style="font-size: 8px; padding: 2px;">
-            <span id="result1" style="margin-left: 5px;">TEST1: Sin tocar</span>
-        </div>
-        <div style="margin-top: 5px;">
-            <input type="file" id="testMobile2" accept="image/*" class="file-input-working" onchange="document.getElementById('result2').innerHTML='TEST2: ' + this.files[0].name" style="font-size: 8px; display: none;">
-            <button onclick="document.getElementById('testMobile2').click(); document.getElementById('result2').innerHTML='TEST2: Boton tocado'" style="font-size: 8px; padding: 2px;">BOTON TEST2</button>
-            <span id="result2" style="margin-left: 5px;">TEST2: Sin tocar</span>
-        </div>
-        <div style="margin-top: 5px;">
-            <input type="file" id="testMobile3" accept="image/*" style="display: none;" onchange="document.getElementById('result3').innerHTML='TEST3: ' + this.files[0].name">
-            <button onclick="document.getElementById('testMobile3').click(); document.getElementById('result3').innerHTML='TEST3: Boton tocado'" style="font-size: 8px; padding: 2px; background: orange;">BOTON TEST3</button>
-            <span id="result3" style="margin-left: 5px;">TEST3: Sin tocar</span>
-        </div>
-        <div style="margin-top: 5px;">
-            <input type="file" id="testMobile4" accept="image/*" style="display: none;" onchange="document.getElementById('result4').innerHTML='TEST4: ' + this.files[0].name">
-            <div onclick="document.getElementById('testMobile4').click(); document.getElementById('result4').innerHTML='TEST4: Area tocada'" style="font-size: 8px; padding: 2px; background: lightblue; cursor: pointer; display: inline-block;">AREA TEST4</div>
-            <span id="result4" style="margin-left: 5px;">TEST4: Sin tocar</span>
-        </div>
-    </div>
 
     <!-- Header -->
     <header class="mobile-header hidden" id="header">
@@ -701,30 +679,6 @@
 
     <script>
         // ===== DEBUG MOBILE: MOSTRAR INFO EN PANTALLA =====
-        window.addEventListener('load', function() {
-            const mobileInfo = document.getElementById('mobileInfo');
-            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            const screenSize = screen.width + 'x' + screen.height;
-            const viewportSize = window.innerWidth + 'x' + window.innerHeight;
-            
-            mobileInfo.innerHTML = 'Móvil: ' + (isMobile ? 'SÍ' : 'NO') + ' | Pantalla: ' + screenSize + ' | Vista: ' + viewportSize;
-            
-            // Test programático después de 2 segundos
-            setTimeout(function() {
-                const testInput1 = document.getElementById('testMobile1');
-                const testInput2 = document.getElementById('testMobile2');
-                
-                if (testInput1) {
-                    const style1 = window.getComputedStyle(testInput1);
-                    document.getElementById('result1').innerHTML = 'TEST1: disabled=' + testInput1.disabled + ' readonly=' + testInput1.readOnly;
-                }
-                
-                if (testInput2) {
-                    const style2 = window.getComputedStyle(testInput2);
-                    document.getElementById('result2').innerHTML = 'TEST2: disabled=' + testInput2.disabled + ' readonly=' + testInput2.readOnly;
-                }
-            }, 2000);
-        });
         
         const API_BASE = 'https://colisan.com/sistema_apps_upload/sistema_apps_api/recetas/';
         let currentUser = null;
@@ -1122,7 +1076,7 @@
                 // Mostrar botón de seleccionar que funciona en móvil
                 container.innerHTML = `
                     <div class="image-no-preview">
-                        <div class="image-no-preview-button" onclick="document.getElementById('newRecipeImage').click()">
+                        <div class="image-no-preview-button" onclick="openNewImageSelector()">
                             <span class="image-no-preview-icon">📷</span>
                             <span class="image-no-preview-text">Seleccionar imagen</span>
                         </div>
@@ -1148,7 +1102,7 @@
                 // Mostrar botón de seleccionar que funciona en móvil
                 container.innerHTML = `
                     <div class="image-no-preview">
-                        <div class="image-no-preview-button" onclick="document.getElementById('newRecipeVideo').click()">
+                        <div class="image-no-preview-button" onclick="openNewVideoSelector()">
                             <span class="image-no-preview-icon">🎥</span>
                             <span class="image-no-preview-text">Seleccionar video</span>
                         </div>
@@ -1169,6 +1123,31 @@
             renderNewVideoUploader('');
         }
         
+        // Funciones para validar antes de abrir selector (NUEVA RECETA)
+        function openNewImageSelector() {
+            const nombre = document.getElementById('newRecipeName').value.trim();
+            const tipo = document.getElementById('newRecipeType').value;
+            
+            if (!nombre || !tipo) {
+                alert('⚠️ Debes completar el NOMBRE y seleccionar un TIPO antes de seleccionar la imagen');
+                return;
+            }
+            
+            document.getElementById('newRecipeImage').click();
+        }
+        
+        function openNewVideoSelector() {
+            const nombre = document.getElementById('newRecipeName').value.trim();
+            const tipo = document.getElementById('newRecipeType').value;
+            
+            if (!nombre || !tipo) {
+                alert('⚠️ Debes completar el NOMBRE y seleccionar un TIPO antes de seleccionar el video');
+                return;
+            }
+            
+            document.getElementById('newRecipeVideo').click();
+        }
+        
         // Inicializar componentes al abrir modal
         function initializeNewRecipeModal() {
             renderNewImageUploader('');
@@ -1178,7 +1157,17 @@
         // ===== FUNCIONES EDICIÓN IMAGEN/VIDEO =====
         
         // Funciones para validar antes de abrir selector (EDITAR)
-        // Función eliminada - ahora el input es directamente clickeable
+        function openEditImageSelector() {
+            const nombre = document.getElementById('editRecipeName').value.trim();
+            const tipo = document.getElementById('editRecipeType').value;
+            
+            if (!nombre || !tipo) {
+                alert('⚠️ Debes completar el NOMBRE y seleccionar un TIPO antes de cambiar la imagen');
+                return;
+            }
+            
+            document.getElementById('editRecipeImage').click();
+        }
         
         function openEditVideoSelector() {
             const nombre = document.getElementById('editRecipeName').value.trim();
@@ -1251,12 +1240,15 @@
                     <div class="image-preview-container">
                         <img src="${imageUrl}" alt="Vista previa" class="image-preview-img">
                         <button type="button" onclick="event.stopPropagation(); removeEditImage()" class="image-remove-btn" title="Eliminar imagen">✕</button>
+                        <button type="button" onclick="openEditImageSelector()" class="btn btn-primary" style="position: absolute; bottom: 10px; left: 10px; font-size: 12px; padding: 5px 10px;">
+                            <i class="fas fa-camera"></i> Cambiar
+                        </button>
                     </div>
                 `;
             } else {
                 container.innerHTML = `
                     <div class="image-no-preview">
-                        <div class="image-no-preview-button" onclick="document.getElementById('editRecipeImage').click()">
+                        <div class="image-no-preview-button" onclick="openEditImageSelector()">
                             <span class="image-no-preview-icon">📷</span>
                             <span class="image-no-preview-text">Seleccionar imagen</span>
                         </div>
@@ -1274,6 +1266,7 @@
                     <div class="image-no-preview video-container" style="background: #f0f9ff; border-color: #3b82f6;">
                         <div style="display: flex; gap: 0.5rem;">
                             <button type="button" onclick="viewEditVideo()" class="video-btn" style="background: #10b981; color: white;">👁️ Ver</button>
+                            <button type="button" onclick="openEditVideoSelector()" class="video-btn" style="background: #3b82f6; color: white;">🎥 Cambiar</button>
                             <button type="button" onclick="removeEditVideo()" class="video-btn video-btn-remove">✕ Quitar</button>
                         </div>
                     </div>
@@ -1281,7 +1274,7 @@
             } else {
                 container.innerHTML = `
                     <div class="image-no-preview">
-                        <div class="image-no-preview-button" onclick="document.getElementById('editRecipeVideo').click()">
+                        <div class="image-no-preview-button" onclick="openEditVideoSelector()">
                             <span class="image-no-preview-icon">🎥</span>
                             <span class="image-no-preview-text">Seleccionar video</span>
                         </div>
