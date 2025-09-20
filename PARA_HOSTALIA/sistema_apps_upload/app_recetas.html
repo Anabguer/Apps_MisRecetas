@@ -1119,10 +1119,10 @@
                     </div>
                 `;
             } else {
-                // Mostrar botón de seleccionar
+                // Mostrar botón de seleccionar que funciona en móvil
                 container.innerHTML = `
                     <div class="image-no-preview">
-                        <div class="image-no-preview-button">
+                        <div class="image-no-preview-button" onclick="document.getElementById('newRecipeImage').click()">
                             <span class="image-no-preview-icon">📷</span>
                             <span class="image-no-preview-text">Seleccionar imagen</span>
                         </div>
@@ -1145,10 +1145,10 @@
                     </div>
                 `;
             } else {
-                // Mostrar botón de seleccionar
+                // Mostrar botón de seleccionar que funciona en móvil
                 container.innerHTML = `
                     <div class="image-no-preview">
-                        <div class="image-no-preview-button">
+                        <div class="image-no-preview-button" onclick="document.getElementById('newRecipeVideo').click()">
                             <span class="image-no-preview-icon">🎥</span>
                             <span class="image-no-preview-text">Seleccionar video</span>
                         </div>
@@ -1256,7 +1256,7 @@
             } else {
                 container.innerHTML = `
                     <div class="image-no-preview">
-                        <div class="image-no-preview-button">
+                        <div class="image-no-preview-button" onclick="document.getElementById('editRecipeImage').click()">
                             <span class="image-no-preview-icon">📷</span>
                             <span class="image-no-preview-text">Seleccionar imagen</span>
                         </div>
@@ -1281,7 +1281,7 @@
             } else {
                 container.innerHTML = `
                     <div class="image-no-preview">
-                        <div class="image-no-preview-button">
+                        <div class="image-no-preview-button" onclick="document.getElementById('editRecipeVideo').click()">
                             <span class="image-no-preview-icon">🎥</span>
                             <span class="image-no-preview-text">Seleccionar video</span>
                         </div>
@@ -1768,9 +1768,7 @@
                             <span style="font-size: 1.5rem; margin-right: 0.5rem;">🖼️</span>
                             <span style="font-size: 0.875rem; font-weight: 600; color: #1f2937;">Imagen</span>
                         </div>
-                        <!-- TEST DIRECTO EN LA APP - SIN CLASES -->
-                        <input type="file" id="testDirecto" accept="image/*" onchange="alert('TEST FUNCIONA: ' + this.files[0].name)" style="width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; margin: 10px 0; background: white; cursor: pointer;">
-                        <input type="file" id="newRecipeImage" accept="image/*" class="file-input-working" onchange="handleNewImageUpload(this)">
+                        <input type="file" id="newRecipeImage" accept="image/*" style="display: none;" onchange="handleNewImageUpload(this)">
                         <input type="hidden" id="newImageUrl">
                         <div id="newImageContainer">
                             <!-- Se llenará dinámicamente -->
@@ -1841,7 +1839,7 @@
                             <span style="font-size: 1.25rem; margin-right: 0.5rem;">🎥</span>
                             <span style="font-size: 0.875rem; font-weight: 600; color: #1f2937;">Video</span>
                         </div>
-                        <input type="file" id="newRecipeVideo" accept="video/*" class="file-input-working" onchange="handleNewVideoUpload(this)">
+                        <input type="file" id="newRecipeVideo" accept="video/*" style="display: none;" onchange="handleNewVideoUpload(this)">
                         <input type="hidden" id="newVideoUrl">
                         <div id="newVideoContainer">
                             <!-- Se llenará dinámicamente -->
@@ -1907,7 +1905,7 @@
                             <span style="font-size: 1.5rem; margin-right: 0.5rem;">🖼️</span>
                             <span style="font-size: 0.875rem; font-weight: 600; color: #1f2937;">Imagen</span>
                         </div>
-                        <input type="file" id="editRecipeImage" accept="image/*" class="file-input-working" onchange="handleEditImageUpload(this)">
+                        <input type="file" id="editRecipeImage" accept="image/*" style="display: none;" onchange="handleEditImageUpload(this)">
                         <input type="hidden" id="editImageUrl">
                         <div id="editImageContainer">
                             <!-- Se llenará dinámicamente -->
