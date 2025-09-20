@@ -31,13 +31,19 @@ C:\SistemaApps\MisRecetasNativa\
 ### **📋 Funciones:**
 ```
 ✅ Login/logout
-✅ Lista de 303 recetas desde Hostalia
+✅ Lista de 303+ recetas desde Hostalia
 ✅ Filtros por tipo (Entrante, Principal, Postre, Bebida, Extra)
 ✅ Filtro saludable (💚)
 ✅ Búsqueda en tiempo real
-✅ Visualización de detalles
+✅ Visualización de detalles con modal
 ✅ Iconos por tipo, saludable, video
-✅ Sistema de valoración (0/5 a 5/5)
+✅ Sistema de valoración (⭐ 0/5 a 5/5)
+✅ CREAR nuevas recetas con imagen/video
+✅ EDITAR recetas existentes
+✅ ELIMINAR recetas con confirmación
+✅ Reproducir videos en modal con autoplay
+✅ Upload inteligente con nombres únicos
+✅ Validación preventiva antes de upload
 ```
 
 ---
@@ -63,8 +69,9 @@ C:\SistemaApps\MisRecetasNativa\
    └── 1 usuario: 1954amg@gmail.com_recetas
 
 🍃 recetas
-   └── 303 recetas migradas
+   └── 303+ recetas (migradas + nuevas creadas por usuarios)
    └── Campos: nombre, tipo, ingredientes, preparación, imagen, video, valoración, saludable, dificultad, tiempo, porciones
+   └── CRUD completo: CREATE, READ, UPDATE, DELETE
 ```
 
 ---
@@ -89,14 +96,16 @@ sistema_apps_upload/
     └── upload_handler.php ← Receptor de archivos
 ```
 
-### **📁 Uploads (cuando se usen):**
+### **📁 Uploads (IMPLEMENTADO):**
 ```
-sistema_apps_upload/
-└── 1954amg@gmail.com_recetas/
-    ├── imagenes/
-    │   └── timestamp_uniqueid.jpg
-    └── videos/
-        └── timestamp_uniqueid.mp4
+sistema_apps_upload/recetas/
+├── images/
+│   ├── 1954amg@gmail.com_recetas_principal-paella-valenciana.jpg
+│   ├── 1954amg@gmail.com_recetas_postre-tarta-chocolate.jpg
+│   └── [usuario]_[tipo]-[nombre].[ext]
+└── videos/
+    ├── 1954amg@gmail.com_recetas_postre-tiramisu.mp4
+    └── [usuario]_[tipo]-[nombre].[ext]
 ```
 
 ---
@@ -227,7 +236,10 @@ C:\xampp\htdocs\mis_recetas\
 **✅ Backend profesional en Hostalia**
 **✅ Arquitectura escalable para múltiples apps**
 **✅ Sistema de usuarios por aplicación**
-**✅ 303 recetas migradas y operativas**
+**✅ 303+ recetas migradas y operativas**
+**✅ CRUD completo de recetas implementado**
+**✅ Sistema de upload multimedia funcional**
+**✅ Validaciones preventivas implementadas**
 **✅ APK lista para Google Play Store**
 
 ---
