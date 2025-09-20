@@ -580,6 +580,22 @@
             background: #ef4444;
             color: white;
         }
+        
+        /* Input de archivo que funciona en móviles (igual que test) */
+        .file-input-working {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            margin: 10px 0;
+            background: white;
+            cursor: pointer;
+        }
+        
+        .file-input-working:hover {
+            border-color: #007bff;
+        }
     </style>
 </head>
 <body>
@@ -1702,17 +1718,7 @@
                             <span style="font-size: 1.5rem; margin-right: 0.5rem;">🖼️</span>
                             <span style="font-size: 0.875rem; font-weight: 600; color: #1f2937;">Imagen</span>
                         </div>
-                        <input type="file" id="newRecipeImage" accept="image/*" style="
-                            width: 100%;
-                            padding: 0.75rem 1rem;
-                            border: 2px solid #d1d5db;
-                            border-radius: 8px;
-                            background: white;
-                            color: #374151;
-                            font-size: 0.875rem;
-                            margin-bottom: 0.5rem;
-                            cursor: pointer;
-                        " onchange="handleNewImageUpload(this)">
+                        <input type="file" id="newRecipeImage" accept="image/*" class="file-input-working" onchange="handleNewImageUpload(this)">
                         <input type="hidden" id="newImageUrl">
                         <div id="newImageContainer">
                             <!-- Se llenará dinámicamente -->
@@ -1783,17 +1789,7 @@
                             <span style="font-size: 1.25rem; margin-right: 0.5rem;">🎥</span>
                             <span style="font-size: 0.875rem; font-weight: 600; color: #1f2937;">Video</span>
                         </div>
-                        <input type="file" id="newRecipeVideo" accept="video/*" style="
-                            width: 100%;
-                            padding: 0.75rem 1rem;
-                            border: 2px solid #d1d5db;
-                            border-radius: 8px;
-                            background: white;
-                            color: #374151;
-                            font-size: 0.875rem;
-                            margin-bottom: 0.5rem;
-                            cursor: pointer;
-                        " onchange="handleNewVideoUpload(this)">
+                        <input type="file" id="newRecipeVideo" accept="video/*" class="file-input-working" onchange="handleNewVideoUpload(this)">
                         <input type="hidden" id="newVideoUrl">
                         <div id="newVideoContainer">
                             <!-- Se llenará dinámicamente -->
@@ -1859,17 +1855,7 @@
                             <span style="font-size: 1.5rem; margin-right: 0.5rem;">🖼️</span>
                             <span style="font-size: 0.875rem; font-weight: 600; color: #1f2937;">Imagen</span>
                         </div>
-                        <input type="file" id="editRecipeImage" accept="image/*" style="
-                            width: 100%;
-                            padding: 0.75rem 1rem;
-                            border: 2px solid #d1d5db;
-                            border-radius: 8px;
-                            background: white;
-                            color: #374151;
-                            font-size: 0.875rem;
-                            margin-bottom: 0.5rem;
-                            cursor: pointer;
-                        " onchange="handleEditImageUpload(this)">
+                        <input type="file" id="editRecipeImage" accept="image/*" class="file-input-working" onchange="handleEditImageUpload(this)">
                         <input type="hidden" id="editImageUrl">
                         <div id="editImageContainer">
                             <!-- Se llenará dinámicamente -->
