@@ -10,7 +10,7 @@ error_log("UPDATE.PHP - Method: " . $_SERVER['REQUEST_METHOD']);
 error_log("UPDATE.PHP - POST data: " . print_r($_POST, true));
 error_log("UPDATE.PHP - FILES data: " . print_r($_FILES, true));
 
-require_once '../config.php';
+require_once 'config.php';
 
 // Solo permitir POST (para FormData)
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

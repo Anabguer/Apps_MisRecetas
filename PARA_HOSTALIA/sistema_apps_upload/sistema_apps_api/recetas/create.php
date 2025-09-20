@@ -4,7 +4,7 @@
 // Endpoint: https://colisan/sistema_apps_api/recetas/create.php
 // =====================================================
 
-require_once '../config.php';
+require_once 'config.php';
 
 // Solo permitir POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
