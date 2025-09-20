@@ -599,9 +599,16 @@
     </style>
 </head>
 <body>
-    <!-- TEST FUERA DEL MODAL -->
-    <div style="position: fixed; top: 10px; right: 10px; z-index: 9999; background: red; color: white; padding: 10px; border-radius: 5px;">
-        <input type="file" id="testFueraModal" accept="image/*" onchange="alert('FUNCIONA FUERA DEL MODAL: ' + this.files[0].name)" style="color: white;">
+    <!-- TEST SUPER BASICO -->
+    <div style="position: fixed; top: 10px; left: 10px; z-index: 9999; background: green; color: white; padding: 10px; border-radius: 5px; font-size: 12px;">
+        <div>TEST BASICO:</div>
+        <input type="file" onchange="alert('BASICO FUNCIONA: ' + this.files[0].name)" style="color: black; background: white;">
+    </div>
+    
+    <!-- TEST IDENTICO AL QUE FUNCIONA -->
+    <div style="position: fixed; top: 10px; right: 10px; z-index: 9999; background: blue; color: white; padding: 10px; border-radius: 5px; font-size: 12px;">
+        <div>TEST IDENTICO:</div>
+        <input type="file" id="testIdentico" accept="image/*" class="file-input-working" onchange="alert('IDENTICO FUNCIONA: ' + this.files[0].name)">
     </div>
 
     <!-- Header -->
@@ -681,6 +688,24 @@
     </div>
 
     <script>
+        // ===== DEBUG: VERIFICAR COMPORTAMIENTO INPUTS =====
+        window.addEventListener('load', function() {
+            console.log('=== DEBUG INPUTS ===');
+            console.log('User Agent:', navigator.userAgent);
+            console.log('Is Mobile:', /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+            
+            // Test programático
+            setTimeout(function() {
+                const testInput = document.getElementById('testIdentico');
+                if (testInput) {
+                    console.log('Test input encontrado:', testInput);
+                    console.log('Test input style:', window.getComputedStyle(testInput));
+                    console.log('Test input disabled:', testInput.disabled);
+                    console.log('Test input readonly:', testInput.readOnly);
+                }
+            }, 1000);
+        });
+        
         const API_BASE = 'https://colisan.com/sistema_apps_upload/sistema_apps_api/recetas/';
         let currentUser = null;
         let currentToken = null;
