@@ -119,7 +119,7 @@ try {
     error_log("CREATE.PHP - videoUrl: " . $videoUrl);
     error_log("CREATE.PHP - usuario_aplicacion_key: " . $usuario_aplicacion_key);
     
-    // Insertar receta
+    // Insertar receta (mismas columnas que update.php)
     $sql = "INSERT INTO recetas (
         usuario_aplicacion_key,
         receta_nombre, 
@@ -132,8 +132,9 @@ try {
         receta_saludable, 
         receta_tiempopreparacion, 
         receta_dificultad, 
-        receta_porciones
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        receta_porciones,
+        fecha_creacion
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
     
     $stmt = $pdo->prepare($sql);
     $result = $stmt->execute([
