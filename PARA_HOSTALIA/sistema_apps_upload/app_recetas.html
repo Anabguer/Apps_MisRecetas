@@ -1133,7 +1133,23 @@
                 return;
             }
             
-            document.getElementById('newRecipeImage').click();
+            // Método que funciona mejor en móviles
+            const input = document.getElementById('newRecipeImage');
+            input.style.display = 'block';
+            input.style.position = 'absolute';
+            input.style.top = '0';
+            input.style.left = '0';
+            input.style.width = '100%';
+            input.style.height = '100%';
+            input.style.opacity = '0';
+            input.style.zIndex = '1000';
+            
+            setTimeout(() => {
+                input.click();
+                setTimeout(() => {
+                    input.style.display = 'none';
+                }, 100);
+            }, 50);
         }
         
         function openNewVideoSelector() {
@@ -1145,7 +1161,23 @@
                 return;
             }
             
-            document.getElementById('newRecipeVideo').click();
+            // Método que funciona mejor en móviles
+            const input = document.getElementById('newRecipeVideo');
+            input.style.display = 'block';
+            input.style.position = 'absolute';
+            input.style.top = '0';
+            input.style.left = '0';
+            input.style.width = '100%';
+            input.style.height = '100%';
+            input.style.opacity = '0';
+            input.style.zIndex = '1000';
+            
+            setTimeout(() => {
+                input.click();
+                setTimeout(() => {
+                    input.style.display = 'none';
+                }, 100);
+            }, 50);
         }
         
         // Inicializar componentes al abrir modal
@@ -1166,7 +1198,23 @@
                 return;
             }
             
-            document.getElementById('editRecipeImage').click();
+            // Método que funciona mejor en móviles
+            const input = document.getElementById('editRecipeImage');
+            input.style.display = 'block';
+            input.style.position = 'absolute';
+            input.style.top = '0';
+            input.style.left = '0';
+            input.style.width = '100%';
+            input.style.height = '100%';
+            input.style.opacity = '0';
+            input.style.zIndex = '1000';
+            
+            setTimeout(() => {
+                input.click();
+                setTimeout(() => {
+                    input.style.display = 'none';
+                }, 100);
+            }, 50);
         }
         
         function openEditVideoSelector() {
@@ -1178,7 +1226,23 @@
                 return;
             }
             
-            document.getElementById('editRecipeVideo').click();
+            // Método que funciona mejor en móviles
+            const input = document.getElementById('editRecipeVideo');
+            input.style.display = 'block';
+            input.style.position = 'absolute';
+            input.style.top = '0';
+            input.style.left = '0';
+            input.style.width = '100%';
+            input.style.height = '100%';
+            input.style.opacity = '0';
+            input.style.zIndex = '1000';
+            
+            setTimeout(() => {
+                input.click();
+                setTimeout(() => {
+                    input.style.display = 'none';
+                }, 100);
+            }, 50);
         }
         
         function handleEditImageUpload(input) {
@@ -1240,8 +1304,10 @@
                     <div class="image-preview-container">
                         <img src="${imageUrl}" alt="Vista previa" class="image-preview-img">
                         <button type="button" onclick="event.stopPropagation(); removeEditImage()" class="image-remove-btn" title="Eliminar imagen">✕</button>
-                        <button type="button" onclick="openEditImageSelector()" class="btn btn-primary" style="position: absolute; bottom: 10px; left: 10px; font-size: 12px; padding: 5px 10px;">
-                            <i class="fas fa-camera"></i> Cambiar
+                    </div>
+                    <div style="margin-top: 10px; text-align: center;">
+                        <button type="button" onclick="openEditImageSelector()" class="btn btn-primary" style="font-size: 14px; padding: 8px 16px; background: #007bff; color: white; border: none; border-radius: 6px;">
+                            <i class="fas fa-camera"></i> Cambiar Imagen
                         </button>
                     </div>
                 `;
