@@ -607,8 +607,19 @@
             <span id="result1" style="margin-left: 5px;">TEST1: Sin tocar</span>
         </div>
         <div style="margin-top: 5px;">
-            <input type="file" id="testMobile2" accept="image/*" class="file-input-working" onchange="document.getElementById('result2').innerHTML='TEST2: ' + this.files[0].name" style="font-size: 8px;">
+            <input type="file" id="testMobile2" accept="image/*" class="file-input-working" onchange="document.getElementById('result2').innerHTML='TEST2: ' + this.files[0].name" style="font-size: 8px; display: none;">
+            <button onclick="document.getElementById('testMobile2').click(); document.getElementById('result2').innerHTML='TEST2: Boton tocado'" style="font-size: 8px; padding: 2px;">BOTON TEST2</button>
             <span id="result2" style="margin-left: 5px;">TEST2: Sin tocar</span>
+        </div>
+        <div style="margin-top: 5px;">
+            <input type="file" id="testMobile3" accept="image/*" style="display: none;" onchange="document.getElementById('result3').innerHTML='TEST3: ' + this.files[0].name">
+            <button onclick="document.getElementById('testMobile3').click(); document.getElementById('result3').innerHTML='TEST3: Boton tocado'" style="font-size: 8px; padding: 2px; background: orange;">BOTON TEST3</button>
+            <span id="result3" style="margin-left: 5px;">TEST3: Sin tocar</span>
+        </div>
+        <div style="margin-top: 5px;">
+            <input type="file" id="testMobile4" accept="image/*" style="display: none;" onchange="document.getElementById('result4').innerHTML='TEST4: ' + this.files[0].name">
+            <div onclick="document.getElementById('testMobile4').click(); document.getElementById('result4').innerHTML='TEST4: Area tocada'" style="font-size: 8px; padding: 2px; background: lightblue; cursor: pointer; display: inline-block;">AREA TEST4</div>
+            <span id="result4" style="margin-left: 5px;">TEST4: Sin tocar</span>
         </div>
     </div>
 
