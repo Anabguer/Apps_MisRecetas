@@ -976,6 +976,16 @@
         // ===== FUNCIONES DE IMAGEN/VIDEO =====
         
         function handleNewImageUpload(input) {
+            // Validar que existan nombre y tipo antes de subir imagen
+            const nombre = document.getElementById('newRecipeName').value.trim();
+            const tipo = document.getElementById('newRecipeType').value;
+            
+            if (!nombre || !tipo) {
+                alert('⚠️ Debes completar el NOMBRE y seleccionar un TIPO antes de subir la imagen');
+                input.value = ''; // Limpiar selección
+                return;
+            }
+            
             const file = input.files[0];
             if (!file) return;
             
@@ -995,6 +1005,16 @@
         }
         
         function handleNewVideoUpload(input) {
+            // Validar que existan nombre y tipo antes de subir video
+            const nombre = document.getElementById('newRecipeName').value.trim();
+            const tipo = document.getElementById('newRecipeType').value;
+            
+            if (!nombre || !tipo) {
+                alert('⚠️ Debes completar el NOMBRE y seleccionar un TIPO antes de subir el video');
+                input.value = ''; // Limpiar selección
+                return;
+            }
+            
             const file = input.files[0];
             if (!file) return;
             
@@ -1083,6 +1103,16 @@
         // ===== FUNCIONES EDICIÓN IMAGEN/VIDEO =====
         
         function handleEditImageUpload(input) {
+            // Validar que existan nombre y tipo antes de subir imagen
+            const nombre = document.getElementById('editRecipeName').value.trim();
+            const tipo = document.getElementById('editRecipeType').value;
+            
+            if (!nombre || !tipo) {
+                alert('⚠️ Debes completar el NOMBRE y seleccionar un TIPO antes de cambiar la imagen');
+                input.value = ''; // Limpiar selección
+                return;
+            }
+            
             const file = input.files[0];
             if (!file) return;
             
@@ -1100,6 +1130,16 @@
         }
         
         function handleEditVideoUpload(input) {
+            // Validar que existan nombre y tipo antes de subir video
+            const nombre = document.getElementById('editRecipeName').value.trim();
+            const tipo = document.getElementById('editRecipeType').value;
+            
+            if (!nombre || !tipo) {
+                alert('⚠️ Debes completar el NOMBRE y seleccionar un TIPO antes de cambiar el video');
+                input.value = ''; // Limpiar selección
+                return;
+            }
+            
             const file = input.files[0];
             if (!file) return;
             
