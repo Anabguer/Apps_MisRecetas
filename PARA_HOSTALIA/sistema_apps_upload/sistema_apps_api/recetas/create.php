@@ -57,16 +57,17 @@ if ($valoracion < 1 || $valoracion > 5) {
 }
 
 try {
-    // Verificar que el usuario existe
+    // Verificar que el usuario existe (misma lógica que update.php)
     $stmt = $pdo->prepare("
-        SELECT usuario_aplicacion_id 
+        SELECT COUNT(*) as total
         FROM usuarios_aplicaciones 
-        WHERE usuario_aplicacion_key = ? AND activo = 1
+        WHERE usuario_aplicacion_key = ?
     ");
     $stmt->execute([$usuario_aplicacion_key]);
+    $result = $stmt->fetch();
     
-    if (!$stmt->fetch()) {
-        errorResponse('Token inválido', 401);
+    if ($result['total'] == 0) {
+        errorResponse('Usuario no encontrado', 404);
     }
     
     // Manejar archivos subidos
