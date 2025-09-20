@@ -1,18 +1,17 @@
 <?php
 // =====================================================
-// API RECETAS - CREAR RECETA
-// Endpoint: https://colisan/sistema_apps_api/recetas/create.php
+// API RECETAS - CREAR RECETA (NUEVO - BASADO EN UPDATE.PHP)
 // =====================================================
 
 // Debug logging
-error_log("CREATE.PHP - Inicio");
-error_log("CREATE.PHP - Method: " . $_SERVER['REQUEST_METHOD']);
-error_log("CREATE.PHP - POST data: " . print_r($_POST, true));
-error_log("CREATE.PHP - FILES data: " . print_r($_FILES, true));
+error_log("CREATE_NEW.PHP - Inicio");
+error_log("CREATE_NEW.PHP - Method: " . $_SERVER['REQUEST_METHOD']);
+error_log("CREATE_NEW.PHP - POST data: " . print_r($_POST, true));
+error_log("CREATE_NEW.PHP - FILES data: " . print_r($_FILES, true));
 
 require_once 'config.php';
 
-// Solo permitir POST
+// Solo permitir POST (para FormData)
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     errorResponse('Método no permitido', 405);
 }
@@ -24,7 +23,7 @@ if (empty($input)) {
     errorResponse('Datos inválidos');
 }
 
-// Validar campos requeridos
+// Validar campos requeridos (SIN receta_id porque es nuevo)
 $requiredFields = ['token', 'nombre', 'tipo', 'ingredientes', 'preparacion'];
 foreach ($requiredFields as $field) {
     if (empty($input[$field])) {
@@ -34,7 +33,7 @@ foreach ($requiredFields as $field) {
 
 $token = $input['token'];
 
-// Decodificar token
+// Decodificar token (IGUAL QUE UPDATE.PHP)
 $decoded = base64_decode($token);
 $parts = explode(':', $decoded);
 
@@ -57,7 +56,7 @@ if ($valoracion < 1 || $valoracion > 5) {
 }
 
 try {
-    // Verificar que el usuario existe (misma lógica que update.php)
+    // Verificar que el usuario existe (IGUAL QUE UPDATE.PHP)
     $stmt = $pdo->prepare("
         SELECT COUNT(*) as total
         FROM usuarios_aplicaciones 
@@ -70,7 +69,7 @@ try {
         errorResponse('Usuario no encontrado', 404);
     }
     
-    // Manejar archivos subidos
+    // Manejar archivos subidos (IGUAL QUE UPDATE.PHP)
     $imagenUrl = '';
     $videoUrl = '';
     
@@ -79,7 +78,7 @@ try {
     $nombreLimpio = preg_replace('/\s+/', '-', trim($nombreLimpio));
     $nombreLimpio = strtolower($nombreLimpio);
     
-    // Procesar imagen si existe
+    // Procesar imagen nueva si existe
     if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
         $imageUploadDir = '../../sistema_apps_upload/recetas/images/';
         if (!is_dir($imageUploadDir)) {
@@ -96,7 +95,7 @@ try {
         }
     }
     
-    // Procesar video si existe
+    // Procesar video nuevo si existe
     if (isset($_FILES['video']) && $_FILES['video']['error'] === UPLOAD_ERR_OK) {
         $videoUploadDir = '../../sistema_apps_upload/recetas/videos/';
         if (!is_dir($videoUploadDir)) {
@@ -114,12 +113,12 @@ try {
     }
     
     // Debug antes de insertar
-    error_log("CREATE.PHP - Antes de insertar receta");
-    error_log("CREATE.PHP - imagenUrl: " . $imagenUrl);
-    error_log("CREATE.PHP - videoUrl: " . $videoUrl);
-    error_log("CREATE.PHP - usuario_aplicacion_key: " . $usuario_aplicacion_key);
+    error_log("CREATE_NEW.PHP - Antes de insertar receta");
+    error_log("CREATE_NEW.PHP - imagenUrl: " . $imagenUrl);
+    error_log("CREATE_NEW.PHP - videoUrl: " . $videoUrl);
+    error_log("CREATE_NEW.PHP - usuario_aplicacion_key: " . $usuario_aplicacion_key);
     
-    // Insertar receta (EXACTAMENTE como update.php pero INSERT)
+    // Insertar receta (ESTRUCTURA SIMPLIFICADA)
     $sql = "INSERT INTO recetas (
         receta_nombre, 
         receta_tipo, 
@@ -144,7 +143,7 @@ try {
         $imagenUrl,
         $videoUrl,
         $valoracion,
-        isset($input['saludable']) ? (bool)$input['saludable'] : false,
+        isset($input['saludable']) ? 1 : 0,  // Simplificado
         $input['tiempo'] ?? '',
         $input['dificultad'] ?? 'Fácil',
         $input['porciones'] ?? '',
@@ -154,21 +153,20 @@ try {
     if ($result) {
         $recipeId = $pdo->lastInsertId();
         
-        logDebug("Receta creada", [
-            'user_key' => $usuario_aplicacion_key,
-            'recipe_id' => $recipeId,
-            'nombre' => $input['nombre']
-        ]);
+        error_log("CREATE_NEW.PHP - Receta creada exitosamente - ID: " . $recipeId);
         
-        successResponse([
+        echo json_encode([
+            'success' => true,
+            'message' => 'Receta creada exitosamente',
             'recipe_id' => $recipeId
-        ], 'Receta creada exitosamente');
+        ]);
     } else {
+        error_log("CREATE_NEW.PHP - Error en execute()");
         errorResponse('Error al crear receta', 500);
     }
     
 } catch (Exception $e) {
-    logDebug("Error creando receta", ['error' => $e->getMessage()]);
-    errorResponse('Error al crear receta', 500);
+    error_log("CREATE_NEW.PHP - Exception: " . $e->getMessage());
+    errorResponse('Error al crear receta: ' . $e->getMessage(), 500);
 }
 ?>
