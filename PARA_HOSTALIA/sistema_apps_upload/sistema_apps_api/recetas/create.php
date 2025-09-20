@@ -4,6 +4,12 @@
 // Endpoint: https://colisan/sistema_apps_api/recetas/create.php
 // =====================================================
 
+// Debug logging
+error_log("CREATE.PHP - Inicio");
+error_log("CREATE.PHP - Method: " . $_SERVER['REQUEST_METHOD']);
+error_log("CREATE.PHP - POST data: " . print_r($_POST, true));
+error_log("CREATE.PHP - FILES data: " . print_r($_FILES, true));
+
 require_once 'config.php';
 
 // Solo permitir POST
@@ -105,6 +111,12 @@ try {
             $videoUrl = 'https://colisan.com/sistema_apps_upload/sistema_apps_upload/recetas/videos/' . $videoName;
         }
     }
+    
+    // Debug antes de insertar
+    error_log("CREATE.PHP - Antes de insertar receta");
+    error_log("CREATE.PHP - imagenUrl: " . $imagenUrl);
+    error_log("CREATE.PHP - videoUrl: " . $videoUrl);
+    error_log("CREATE.PHP - usuario_aplicacion_key: " . $usuario_aplicacion_key);
     
     // Insertar receta
     $sql = "INSERT INTO recetas (
