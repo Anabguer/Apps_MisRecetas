@@ -4,10 +4,6 @@
 // Endpoint: https://colisan/sistema_apps_api/recetas/delete.php
 // =====================================================
 
-// Debug logging
-error_log("DELETE.PHP - Inicio");
-error_log("DELETE.PHP - Method: " . $_SERVER['REQUEST_METHOD']);
-
 require_once 'config.php';
 
 // Solo permitir POST (como update.php y create_new.php)

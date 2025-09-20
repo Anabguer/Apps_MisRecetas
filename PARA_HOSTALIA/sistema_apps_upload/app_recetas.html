@@ -1483,26 +1483,14 @@
                 method: 'POST',
                 body: formData
             })
-            .then(response => {
-                console.log('Response status:', response.status);
-                console.log('Response headers:', response.headers);
-                return response.text(); // Cambiar a text() para ver la respuesta cruda
-            })
-            .then(responseText => {
-                console.log('Response text:', responseText);
-                try {
-                    const data = JSON.parse(responseText);
-                    if (data.success) {
-                        alert('Receta actualizada exitosamente');
-                        closeEditRecipeModal();
-                        loadRecipes(); // Recargar lista
-                    } else {
-                        alert('Error: ' + data.error);
-                    }
-                } catch (jsonError) {
-                    console.error('JSON Parse Error:', jsonError);
-                    console.error('Response was:', responseText);
-                    alert('Error del servidor: Respuesta no válida. Ver consola para detalles.');
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Receta actualizada exitosamente');
+                    closeEditRecipeModal();
+                    loadRecipes(); // Recargar lista
+                } else {
+                    alert('Error: ' + data.error);
                 }
             })
             .catch(error => {

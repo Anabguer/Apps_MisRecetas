@@ -1,13 +1,7 @@
 <?php
 // =====================================================
-// API RECETAS - CREAR RECETA (NUEVO - BASADO EN UPDATE.PHP)
+// API RECETAS - CREAR RECETA
 // =====================================================
-
-// Debug logging
-error_log("CREATE_NEW.PHP - Inicio");
-error_log("CREATE_NEW.PHP - Method: " . $_SERVER['REQUEST_METHOD']);
-error_log("CREATE_NEW.PHP - POST data: " . print_r($_POST, true));
-error_log("CREATE_NEW.PHP - FILES data: " . print_r($_FILES, true));
 
 require_once 'config.php';
 
@@ -112,11 +106,6 @@ try {
         }
     }
     
-    // Debug antes de insertar
-    error_log("CREATE_NEW.PHP - Antes de insertar receta");
-    error_log("CREATE_NEW.PHP - imagenUrl: " . $imagenUrl);
-    error_log("CREATE_NEW.PHP - videoUrl: " . $videoUrl);
-    error_log("CREATE_NEW.PHP - usuario_aplicacion_key: " . $usuario_aplicacion_key);
     
     // Insertar receta (ESTRUCTURA SIMPLIFICADA)
     $sql = "INSERT INTO recetas (
@@ -153,7 +142,6 @@ try {
     if ($result) {
         $recipeId = $pdo->lastInsertId();
         
-        error_log("CREATE_NEW.PHP - Receta creada exitosamente - ID: " . $recipeId);
         
         echo json_encode([
             'success' => true,
@@ -161,12 +149,10 @@ try {
             'recipe_id' => $recipeId
         ]);
     } else {
-        error_log("CREATE_NEW.PHP - Error en execute()");
         errorResponse('Error al crear receta', 500);
     }
     
 } catch (Exception $e) {
-    error_log("CREATE_NEW.PHP - Exception: " . $e->getMessage());
     errorResponse('Error al crear receta: ' . $e->getMessage(), 500);
 }
 ?>
