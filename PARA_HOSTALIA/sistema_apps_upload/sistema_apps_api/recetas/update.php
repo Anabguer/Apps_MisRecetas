@@ -86,9 +86,9 @@ try {
             mkdir($imageUploadDir, 0777, true);
         }
         
-        // Nombre: tipo-nombre.extension
+        // Nombre: usuario_tipo-nombre.extension
         $extension = strtolower(pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION));
-        $imageName = strtolower($input['tipo']) . '-' . $nombreLimpio . '.' . $extension;
+        $imageName = $usuario_aplicacion_key . '_' . strtolower($input['tipo']) . '-' . $nombreLimpio . '.' . $extension;
         $imagePath = $imageUploadDir . $imageName;
         
         if (move_uploaded_file($_FILES['imagen']['tmp_name'], $imagePath)) {
@@ -103,9 +103,9 @@ try {
             mkdir($videoUploadDir, 0777, true);
         }
         
-        // Nombre: tipo-nombre.extension
+        // Nombre: usuario_tipo-nombre.extension
         $extension = strtolower(pathinfo($_FILES['video']['name'], PATHINFO_EXTENSION));
-        $videoName = strtolower($input['tipo']) . '-' . $nombreLimpio . '.' . $extension;
+        $videoName = $usuario_aplicacion_key . '_' . strtolower($input['tipo']) . '-' . $nombreLimpio . '.' . $extension;
         $videoPath = $videoUploadDir . $videoName;
         
         if (move_uploaded_file($_FILES['video']['tmp_name'], $videoPath)) {
