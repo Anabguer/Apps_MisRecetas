@@ -37,10 +37,16 @@ if ($input['action'] === 'login') {
             
             $nombre = $user ? $user['nombre'] : 'Usuario';
             
+            // Generar token en formato correcto: base64(usuario_aplicacion_key:timestamp)
+            $usuario_aplicacion_key = '1954amg@gmail.com_recetas';
+            $timestamp = time();
+            $token_data = $usuario_aplicacion_key . ':' . $timestamp;
+            $token = base64_encode($token_data);
+            
             echo json_encode([
                 'success' => true,
                 'data' => [
-                    'token' => 'test_token_123',
+                    'token' => $token,
                     'user' => [
                         'email' => '1954amg@gmail.com',
                         'nombre' => $nombre
