@@ -1345,6 +1345,73 @@
                 });
             }
         }
+        
+        function saveEditRecipe() {
+            if (!currentRecipe) return;
+            
+            const form = document.getElementById('editRecipeForm');
+            const formData = new FormData();
+            
+            // Validar campos requeridos
+            const nombre = document.getElementById('editRecipeName').value.trim();
+            const tipo = document.getElementById('editRecipeType').value;
+            
+            if (!nombre) {
+                alert('El nombre de la receta es obligatorio');
+                return;
+            }
+            
+            if (!tipo) {
+                alert('Selecciona un tipo de receta');
+                return;
+            }
+            
+            // Recopilar datos
+            formData.append('receta_id', currentRecipe.receta_id);
+            formData.append('nombre', nombre);
+            formData.append('tipo', tipo);
+            formData.append('saludable', document.getElementById('editRecipeHealthy').checked ? 1 : 0);
+            formData.append('tiempo', document.getElementById('editRecipeTime').value || 0);
+            formData.append('porciones', document.getElementById('editRecipePortions').value || 1);
+            formData.append('ingredientes', document.getElementById('editRecipeIngredients').value);
+            formData.append('preparacion', document.getElementById('editRecipePreparation').value);
+            formData.append('token', currentToken);
+            
+            // Archivos
+            const imageFile = document.getElementById('editRecipeImage').files[0];
+            const videoFile = document.getElementById('editRecipeVideo').files[0];
+            
+            if (imageFile) formData.append('imagen', imageFile);
+            if (videoFile) formData.append('video', videoFile);
+            
+            // Si no hay archivos nuevos, mantener URLs existentes
+            if (!imageFile) formData.append('imagen_url', document.getElementById('editImageUrl').value || '');
+            if (!videoFile) formData.append('video_url', document.getElementById('editVideoUrl').value || '');
+            
+            // Enviar a API
+            fetch(API_BASE + 'update.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Receta actualizada exitosamente');
+                    closeEditRecipeModal();
+                    loadRecipes(); // Recargar lista
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            })
+            .catch(error => {
+                alert('Error de conexión: ' + error.message);
+            });
+        }
+        
+        function closeEditRecipeModal() {
+            document.getElementById('editRecipeModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
 
         let saludableFilter = false;
         let searchTerm = '';

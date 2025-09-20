@@ -6,23 +6,28 @@
 
 require_once '../config.php';
 
-// Solo permitir PUT
-if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
+// Solo permitir POST (para FormData)
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     errorResponse('Método no permitido', 405);
 }
 
-// Obtener datos del JSON
-$input = json_decode(file_get_contents('php://input'), true);
+// Obtener datos del FormData (POST)
+$input = $_POST;
 
-if (!$input) {
+if (empty($input)) {
     errorResponse('Datos inválidos');
 }
 
 // Validar campos requeridos
-validateInput($input, ['token', 'recipe_id', 'nombre', 'tipo', 'ingredientes', 'preparacion']);
+$requiredFields = ['token', 'receta_id', 'nombre', 'tipo', 'ingredientes', 'preparacion'];
+foreach ($requiredFields as $field) {
+    if (empty($input[$field])) {
+        errorResponse("Campo requerido: $field");
+    }
+}
 
 $token = $input['token'];
-$recipeId = $input['recipe_id'];
+$recipeId = $input['receta_id'];
 
 // Decodificar token
 $decoded = base64_decode($token);
@@ -59,6 +64,40 @@ try {
         errorResponse('Receta no encontrada o no tienes permisos', 404);
     }
     
+    // Manejar archivos subidos
+    $imagenUrl = $input['imagen_url'] ?? '';  // URL existente por defecto
+    $videoUrl = $input['video_url'] ?? '';    // URL existente por defecto
+    
+    // Procesar imagen nueva si existe
+    if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
+        $uploadDir = '../../sistema_apps_upload/recetas/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+        
+        $imageName = uniqid() . '_' . $_FILES['imagen']['name'];
+        $imagePath = $uploadDir . $imageName;
+        
+        if (move_uploaded_file($_FILES['imagen']['tmp_name'], $imagePath)) {
+            $imagenUrl = 'https://colisan.com/sistema_apps_upload/sistema_apps_upload/recetas/' . $imageName;
+        }
+    }
+    
+    // Procesar video nuevo si existe
+    if (isset($_FILES['video']) && $_FILES['video']['error'] === UPLOAD_ERR_OK) {
+        $uploadDir = '../../sistema_apps_upload/recetas/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+        
+        $videoName = uniqid() . '_' . $_FILES['video']['name'];
+        $videoPath = $uploadDir . $videoName;
+        
+        if (move_uploaded_file($_FILES['video']['tmp_name'], $videoPath)) {
+            $videoUrl = 'https://colisan.com/sistema_apps_upload/sistema_apps_upload/recetas/' . $videoName;
+        }
+    }
+    
     // Actualizar receta
     $sql = "UPDATE recetas SET 
         receta_nombre = ?, 
@@ -81,8 +120,8 @@ try {
         $input['tipo'],
         $input['ingredientes'],
         $input['preparacion'],
-        $input['imagen'] ?? '',
-        $input['video'] ?? '',
+        $imagenUrl,
+        $videoUrl,
         $valoracion,
         isset($input['saludable']) ? (bool)$input['saludable'] : false,
         $input['tiempo'] ?? '',
