@@ -1216,7 +1216,7 @@
                         <button onclick="closeVideoModal()" 
                                 style="background: #f3f4f6; border: none; border-radius: 50%; width: 2rem; height: 2rem; cursor: pointer; display: flex; align-items: center; justify-content: center;">✕</button>
                     </div>
-                    <video controls autoplay style="max-width: 100%; max-height: 70vh;">
+                    <video id="modalVideo" controls autoplay muted playsinline style="max-width: 100%; max-height: 70vh;">
                         <source src="${videoUrl}" type="video/mp4">
                         Tu navegador no soporta la reproducción de video.
                     </video>
@@ -1225,6 +1225,31 @@
             
             document.body.appendChild(videoModal);
             document.body.style.overflow = 'hidden';
+            
+            // FORZAR REPRODUCCIÓN EN MÓVIL
+            setTimeout(() => {
+                const video = document.getElementById('modalVideo');
+                if (video) {
+                    video.play().catch(error => {
+                        console.log('Autoplay bloqueado:', error);
+                        // Si falla el autoplay, mostrar mensaje al usuario
+                        const playButton = document.createElement('button');
+                        playButton.innerHTML = '▶️ Reproducir Video';
+                        playButton.style.cssText = `
+                            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                            background: rgba(0,0,0,0.8); color: white; border: none;
+                            padding: 1rem 2rem; border-radius: 8px; font-size: 1.2rem;
+                            cursor: pointer; z-index: 10;
+                        `;
+                        playButton.onclick = () => {
+                            video.play();
+                            playButton.remove();
+                        };
+                        video.parentElement.style.position = 'relative';
+                        video.parentElement.appendChild(playButton);
+                    });
+                }
+            }, 100);
         }
         
         function closeVideoModal() {
