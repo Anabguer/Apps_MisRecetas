@@ -933,8 +933,8 @@
             if (imageFile) formData.append('imagen', imageFile);
             if (videoFile) formData.append('video', videoFile);
             
-            // Enviar a API
-            fetch(API_BASE + 'create.php', {
+            // Enviar a API (usando create_new.php temporalmente)
+            fetch(API_BASE + 'create_new.php', {
                 method: 'POST',
                 body: formData
             })
