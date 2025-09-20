@@ -1,0 +1,109 @@
+# =====================================================
+# CONFIGURACIÓN DE SEGURIDAD APACHE
+# Protecciones adicionales para la aplicación
+# =====================================================
+
+# Prevenir acceso a archivos sensibles
+<Files "*.sql">
+    Require all denied
+</Files>
+
+<Files "*.log">
+    Require all denied
+</Files>
+
+<Files ".env">
+    Require all denied
+</Files>
+
+<Files "config/*.php">
+    Require all denied
+</Files>
+
+# Proteger archivos PHP en includes
+<FilesMatch "^(includes|logs)/">
+    Require all denied
+</FilesMatch>
+
+# Prevenir ejecución de PHP en uploads
+<FilesMatch "^uploads/.*\.php$">
+    Require all denied
+</FilesMatch>
+
+# Headers de seguridad
+<IfModule mod_headers.c>
+    # Prevenir clickjacking
+    Header always set X-Frame-Options "SAMEORIGIN"
+    
+    # Prevenir MIME sniffing
+    Header always set X-Content-Type-Options "nosniff"
+    
+    # Prevenir XSS
+    Header always set X-XSS-Protection "1; mode=block"
+    
+    # Política de referrer
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    
+    # Eliminar información del servidor
+    Header unset Server
+    Header unset X-Powered-By
+</IfModule>
+
+# Limitar tamaño de uploads
+<IfModule mod_php.c>
+    php_value upload_max_filesize 10M
+    php_value post_max_size 12M
+    php_value max_execution_time 30
+    php_value max_input_time 30
+</IfModule>
+
+# Prevenir hotlinking de imágenes
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Proteger imágenes de hotlinking (excepto desde tu dominio)
+    RewriteCond %{HTTP_REFERER} !^$
+    RewriteCond %{HTTP_REFERER} !^https?://(www\.)?tu-dominio\.com [NC]
+    RewriteCond %{HTTP_REFERER} !^https?://localhost [NC]
+    RewriteRule \.(jpg|jpeg|png|gif|webp|mp4|webm)$ - [F,L]
+    
+    # Redirigir HTTP a HTTPS en producción
+    RewriteCond %{HTTPS} off
+    RewriteCond %{HTTP_HOST} !^localhost
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# Prevenir listado de directorios
+Options -Indexes
+
+# Configuración de errores (no mostrar información sensible)
+<IfModule mod_php.c>
+    php_flag display_errors off
+    php_flag log_errors on
+    php_value error_log "/tmp/php_errors.log"
+</IfModule>
+
+# Bloquear user agents maliciosos
+<IfModule mod_rewrite.c>
+    RewriteCond %{HTTP_USER_AGENT} (libwww-perl|wget|python|nikto|curl|scan|java|winhttp|clshttp|loader) [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} (%0A|%0D|%27|%3C|%3E|%00) [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} (;|<|>|'|"|\)|\(|%0A|%0D|%22|%27|%28|%3C|%3E|%00).*(libwww-perl|wget|python|nikto|curl|scan|java|winhttp|HTTrack|clshttp|archiver|loader|email|harvest|extract|grab|miner) [NC]
+    RewriteRule .* - [F,L]
+</IfModule>
+
+# Limitar métodos HTTP
+<LimitExcept GET POST>
+    Require all denied
+</LimitExcept>
+
+# Configuración de cache para archivos estáticos
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
+</IfModule>

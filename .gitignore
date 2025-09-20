@@ -1,0 +1,38 @@
+# ===== ARCHIVOS TEMPORALES =====
+*.tmp
+*.temp
+*.log
+
+# ===== ARCHIVOS DE CONFIGURACIÓN LOCAL =====
+config/database.php
+config/local_config.php
+
+# ===== ARCHIVOS DE PRUEBA =====
+test_*.php
+test_*.html
+*_test.*
+
+# ===== CARPETAS DE DESARROLLO =====
+temp/
+tmp/
+logs/
+
+# ===== ARCHIVOS DE SISTEMA =====
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# ===== NODE MODULES (si se usan) =====
+node_modules/
+package-lock.json
+
+# ===== ARCHIVOS IDE =====
+.vscode/
+.idea/
+*.code-workspace
+
+# ===== ARCHIVOS DE BACKUP =====
+*.bak
+*.backup
+*~

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Apps</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f8f9fa; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .container { max-width: 400px; padding: 2rem; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; }
+        .logo { font-size: 4rem; margin-bottom: 1rem; }
+        h1 { color: #374151; margin-bottom: 2rem; }
+        .app-grid { display: grid; gap: 1rem; }
+        .app-card { background: #f8f9fa; padding: 1.5rem; border-radius: 8px; cursor: pointer; transition: transform 0.2s; text-decoration: none; color: inherit; }
+        .app-card:hover { transform: translateY(-2px); background: #e5e7eb; }
+        .app-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+        .app-name { font-weight: 600; color: #374151; }
+        .app-desc { font-size: 0.9rem; color: #6b7280; margin-top: 0.25rem; }
+        .coming-soon { opacity: 0.5; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🏠</div>
+        <h1>Sistema Apps</h1>
+        
+        <div class="app-grid">
+            <a href="app.html" class="app-card">
+                <div class="app-icon">🍃</div>
+                <div class="app-name">Mis Recetas</div>
+                <div class="app-desc">Crea y gestiona tus recetas</div>
+            </a>
+            
+            <div class="app-card coming-soon">
+                <div class="app-icon">🧩</div>
+                <div class="app-name">Puzzle Game</div>
+                <div class="app-desc">Próximamente...</div>
+            </div>
+            
+            <div class="app-card coming-soon">
+                <div class="app-icon">🧠</div>
+                <div class="app-name">Memory Game</div>
+                <div class="app-desc">Próximamente...</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
