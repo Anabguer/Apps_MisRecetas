@@ -596,6 +596,57 @@
         .file-input-working:hover {
             border-color: #007bff;
         }
+
+        /* Estilos específicos para inputs móviles optimizados */
+        .mobile-file-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .mobile-file-button {
+            position: relative;
+            display: block;
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            overflow: hidden;
+        }
+
+        .mobile-file-button:hover {
+            border-color: #007bff;
+            background: #f8f9ff;
+        }
+
+        .mobile-file-button:active {
+            transform: scale(0.98);
+        }
+
+        /* Estrellas de valoración */
+        .star {
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            opacity: 0.3;
+        }
+        
+        .star:hover {
+            transform: scale(1.2);
+        }
+        
+        .star.active {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -948,6 +999,7 @@
             formData.append('saludable', document.getElementById('newRecipeHealthy').checked ? 1 : 0);
             formData.append('tiempo', document.getElementById('newRecipeTime').value || 0);
             formData.append('porciones', document.getElementById('newRecipePortions').value || 1);
+            formData.append('valoracion', document.getElementById('newRecipeRating').value || 0);
             formData.append('ingredientes', document.getElementById('newRecipeIngredients').value);
             formData.append('preparacion', document.getElementById('newRecipePreparation').value);
             formData.append('token', currentToken);
@@ -1073,13 +1125,11 @@
                     </div>
                 `;
             } else {
-                // Mostrar botón de seleccionar que funciona en móvil
+                // BOTÓN OPTIMIZADO PARA MÓVIL - MÉTODO MEJORADO
                 container.innerHTML = `
-                    <div class="image-no-preview">
-                        <div class="image-no-preview-button" onclick="openNewImageSelector()">
-                            <span class="image-no-preview-icon">📷</span>
-                            <span class="image-no-preview-text">Seleccionar imagen</span>
-                        </div>
+                    <div class="mobile-file-button" onclick="openNewImageSelector()">
+                        <span class="image-no-preview-icon">📷</span>
+                        <span class="image-no-preview-text">Seleccionar imagen</span>
                     </div>
                 `;
             }
@@ -1099,13 +1149,11 @@
                     </div>
                 `;
             } else {
-                // Mostrar botón de seleccionar que funciona en móvil
+                // BOTÓN OPTIMIZADO PARA MÓVIL - MÉTODO MEJORADO
                 container.innerHTML = `
-                    <div class="image-no-preview">
-                        <div class="image-no-preview-button" onclick="openNewVideoSelector()">
-                            <span class="image-no-preview-icon">🎥</span>
-                            <span class="image-no-preview-text">Seleccionar video</span>
-                        </div>
+                    <div class="mobile-file-button" onclick="openNewVideoSelector()">
+                        <span class="image-no-preview-icon">🎥</span>
+                        <span class="image-no-preview-text">Seleccionar video</span>
                     </div>
                 `;
             }
@@ -1123,7 +1171,7 @@
             renderNewVideoUploader('');
         }
         
-        // Funciones para validar antes de abrir selector (NUEVA RECETA)
+        // Funciones para validar antes de abrir selector (NUEVA RECETA) - MÉTODO MEJORADO PARA MÓVILES
         function openNewImageSelector() {
             const nombre = document.getElementById('newRecipeName').value.trim();
             const tipo = document.getElementById('newRecipeType').value;
@@ -1133,23 +1181,21 @@
                 return;
             }
             
-            // Método que funciona mejor en móviles
+            // MÉTODO OPTIMIZADO PARA WEBVIEW MÓVIL
             const input = document.getElementById('newRecipeImage');
-            input.style.display = 'block';
-            input.style.position = 'absolute';
-            input.style.top = '0';
-            input.style.left = '0';
-            input.style.width = '100%';
-            input.style.height = '100%';
-            input.style.opacity = '0';
-            input.style.zIndex = '1000';
             
-            setTimeout(() => {
+            // Método 1: Trigger directo
+            try {
                 input.click();
-                setTimeout(() => {
-                    input.style.display = 'none';
-                }, 100);
-            }, 50);
+            } catch (e) {
+                // Método 2: Si falla, crear evento programático
+                const event = new MouseEvent('click', {
+                    view: window,
+                    bubbles: true,
+                    cancelable: true
+                });
+                input.dispatchEvent(event);
+            }
         }
         
         function openNewVideoSelector() {
@@ -1161,29 +1207,30 @@
                 return;
             }
             
-            // Método que funciona mejor en móviles
+            // MÉTODO OPTIMIZADO PARA WEBVIEW MÓVIL
             const input = document.getElementById('newRecipeVideo');
-            input.style.display = 'block';
-            input.style.position = 'absolute';
-            input.style.top = '0';
-            input.style.left = '0';
-            input.style.width = '100%';
-            input.style.height = '100%';
-            input.style.opacity = '0';
-            input.style.zIndex = '1000';
             
-            setTimeout(() => {
+            // Método 1: Trigger directo
+            try {
                 input.click();
-                setTimeout(() => {
-                    input.style.display = 'none';
-                }, 100);
-            }, 50);
+            } catch (e) {
+                // Método 2: Si falla, crear evento programático
+                const event = new MouseEvent('click', {
+                    view: window,
+                    bubbles: true,
+                    cancelable: true
+                });
+                input.dispatchEvent(event);
+            }
         }
         
         // Inicializar componentes al abrir modal
         function initializeNewRecipeModal() {
             renderNewImageUploader('');
             renderNewVideoUploader('');
+            // Inicializar estrellas en 0 (todas grises)
+            updateStars('#newRecipeModal', 0);
+            document.getElementById('newRecipeRating').value = 0;
         }
         
         // ===== FUNCIONES EDICIÓN IMAGEN/VIDEO =====
@@ -1471,8 +1518,12 @@
             document.getElementById('editRecipeHealthy').checked = currentRecipe.receta_saludable;
             document.getElementById('editRecipeTime').value = currentRecipe.receta_tiempopreparacion || '';
             document.getElementById('editRecipePortions').value = currentRecipe.receta_porciones || '';
+            document.getElementById('editRecipeRating').value = currentRecipe.receta_valoracion || 0;
             document.getElementById('editRecipeIngredients').value = currentRecipe.receta_ingredients || '';
             document.getElementById('editRecipePreparation').value = currentRecipe.receta_preparation || '';
+            
+            // Inicializar estrellas de valoración
+            updateStars('#editRecipeModal', currentRecipe.receta_valoracion || 0);
             
             // Seleccionar tipo
             document.querySelectorAll('#editRecipeModal .type-button').forEach(btn => {
@@ -1560,6 +1611,7 @@
             formData.append('saludable', document.getElementById('editRecipeHealthy').checked ? 1 : 0);
             formData.append('tiempo', document.getElementById('editRecipeTime').value || 0);
             formData.append('porciones', document.getElementById('editRecipePortions').value || 1);
+            formData.append('valoracion', document.getElementById('editRecipeRating').value || 0);
             formData.append('ingredientes', document.getElementById('editRecipeIngredients').value);
             formData.append('preparacion', document.getElementById('editRecipePreparation').value);
             formData.append('token', currentToken);
@@ -1599,6 +1651,29 @@
         function closeEditRecipeModal() {
             document.getElementById('editRecipeModal').classList.add('hidden');
             document.body.style.overflow = 'auto';
+        }
+
+        // ===== FUNCIONES DE VALORACIÓN CON ESTRELLAS =====
+        
+        function setNewRating(rating) {
+            document.getElementById('newRecipeRating').value = rating;
+            updateStars('#newRecipeModal', rating);
+        }
+        
+        function setEditRating(rating) {
+            document.getElementById('editRecipeRating').value = rating;
+            updateStars('#editRecipeModal', rating);
+        }
+        
+        function updateStars(modalSelector, rating) {
+            const stars = document.querySelectorAll(modalSelector + ' .star');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
         }
 
         let saludableFilter = false;
@@ -1868,7 +1943,7 @@
                     <!-- Separador -->
                     <div style="border-top: 1px solid #e5e7eb; margin: 1.5rem 0;"></div>
 
-                    <!-- Tiempo y Porciones -->
+                    <!-- Tiempo, Porciones y Valoración -->
                     <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
                         <div style="flex: 1;">
                             <label>Tiempo (min)</label>
@@ -1877,6 +1952,17 @@
                         <div style="flex: 1;">
                             <label>Porc</label>
                             <input type="number" id="newRecipePortions" min="1" max="20" placeholder="4">
+                        </div>
+                        <div style="flex: 1;">
+                            <label>⭐ Valoración</label>
+                            <div style="display: flex; gap: 2px; margin-top: 0.5rem;">
+                                <span class="star" data-rating="1" onclick="setNewRating(1)">⭐</span>
+                                <span class="star" data-rating="2" onclick="setNewRating(2)">⭐</span>
+                                <span class="star" data-rating="3" onclick="setNewRating(3)">⭐</span>
+                                <span class="star" data-rating="4" onclick="setNewRating(4)">⭐</span>
+                                <span class="star" data-rating="5" onclick="setNewRating(5)">⭐</span>
+                            </div>
+                            <input type="hidden" id="newRecipeRating" value="0">
                         </div>
                     </div>
 
@@ -2016,7 +2102,7 @@
 
                     <div style="border-top: 1px solid #e5e7eb; margin: 1.5rem 0;"></div>
 
-                    <!-- Tiempo y Porciones -->
+                    <!-- Tiempo, Porciones y Valoración -->
                     <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
                         <div style="flex: 1;">
                             <label>Tiempo (min)</label>
@@ -2025,6 +2111,17 @@
                         <div style="flex: 1;">
                             <label>Porc</label>
                             <input type="number" id="editRecipePortions" min="1" max="20">
+                        </div>
+                        <div style="flex: 1;">
+                            <label>⭐ Valoración</label>
+                            <div style="display: flex; gap: 2px; margin-top: 0.5rem;">
+                                <span class="star" data-rating="1" onclick="setEditRating(1)">⭐</span>
+                                <span class="star" data-rating="2" onclick="setEditRating(2)">⭐</span>
+                                <span class="star" data-rating="3" onclick="setEditRating(3)">⭐</span>
+                                <span class="star" data-rating="4" onclick="setEditRating(4)">⭐</span>
+                                <span class="star" data-rating="5" onclick="setEditRating(5)">⭐</span>
+                            </div>
+                            <input type="hidden" id="editRecipeRating" value="0">
                         </div>
                     </div>
 
