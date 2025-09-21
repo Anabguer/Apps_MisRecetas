@@ -2,8 +2,13 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Mis Recetas</title>
+    
+    <!-- Ocultar barra de estado en móvil -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
     <!-- PWA Manifest específico para Recetas -->
     <link rel="manifest" href="manifest_recetas.json">
@@ -18,6 +23,7 @@
         .mobile-header {
             background: #f8f9fa;
             padding: 1rem;
+            padding-top: max(2.5rem, env(safe-area-inset-top, 2.5rem)); /* Respeta safe area + espacio extra */
             position: fixed;
             top: 0;
             left: 0;
@@ -79,7 +85,7 @@
             background: #f8f9fa;
             padding: 0.25rem 1rem;
             position: fixed;
-            top: 67px;
+            top: 91px; /* Ajustado para el header más grande */
             left: 0;
             right: 0;
             z-index: 99;
@@ -160,7 +166,7 @@
         
         /* Content */
         .content {
-            padding-top: 105px;
+            padding-top: 129px; /* Ajustado para header y filtros más grandes */
             padding-bottom: 2rem;
         }
         
@@ -647,6 +653,36 @@
         .star.active {
             opacity: 1;
         }
+
+        /* Estilos para pestañas de autenticación */
+        .tab-button {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-weight: 500;
+            color: #6b7280;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab-button:hover {
+            color: #374151;
+        }
+
+        .tab-button.active {
+            color: #22c55e;
+            border-bottom-color: #22c55e;
+        }
+
+        .auth-form {
+            transition: opacity 0.3s ease;
+        }
+
+        .auth-form.hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -695,23 +731,71 @@
 
     <!-- Content -->
     <div class="content">
-        <!-- Login -->
+        <!-- Login/Register -->
         <div class="login-container" id="loginContainer">
             <div style="text-align: center; margin-bottom: 2rem;">
                 <div style="font-size: 3rem; margin-bottom: 1rem;">🍃</div>
                 <h2>Mis Recetas</h2>
             </div>
             
-            <form id="loginForm">
+            <!-- Pestañas Login/Register -->
+            <div style="display: flex; margin-bottom: 2rem; border-bottom: 2px solid #e5e7eb;">
+                <button type="button" id="loginTab" class="tab-button active" onclick="showLoginForm()">Iniciar Sesión</button>
+                <button type="button" id="registerTab" class="tab-button" onclick="showRegisterForm()">Registrarse</button>
+            </div>
+            
+            <!-- Formulario de Login -->
+            <form id="loginForm" class="auth-form">
                 <div class="form-group">
                     <label>Email</label>
-                    <input type="email" id="email" value="1954amg@gmail.com" required>
+                    <input type="email" id="loginEmail" placeholder="tu@email.com" required oninput="hideError()">
                 </div>
                 <div class="form-group">
                     <label>Contraseña</label>
-                    <input type="password" id="password" required>
+                    <input type="password" id="loginPassword" required oninput="hideError()">
                 </div>
                 <button type="submit" class="btn btn-primary">Entrar</button>
+            </form>
+
+            <!-- Formulario de Registro -->
+            <form id="registerForm" class="auth-form hidden">
+                <div class="form-group">
+                    <label>Nombre completo</label>
+                    <input type="text" id="registerName" placeholder="Tu nombre completo" required oninput="hideError()">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="registerEmail" placeholder="tu@email.com" required oninput="hideError()">
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" id="registerPassword" minlength="6" placeholder="Mínimo 6 caracteres" required oninput="hideError()">
+                </div>
+                <div class="form-group">
+                    <label>Confirmar contraseña</label>
+                    <input type="password" id="registerPasswordConfirm" minlength="6" placeholder="Repetir contraseña" required oninput="hideError()">
+                </div>
+                <button type="submit" class="btn btn-primary">Registrarse</button>
+                <p style="font-size: 0.8rem; color: #6b7280; margin-top: 1rem; text-align: center;">
+                    📧 Recibirás un código de verificación en tu email
+                </p>
+            </form>
+
+            <!-- Formulario de Verificación -->
+            <form id="verifyForm" class="auth-form hidden">
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <div style="font-size: 2rem; margin-bottom: 1rem;">📧</div>
+                    <h3>Verificar tu email</h3>
+                    <p style="color: #6b7280;">Hemos enviado un código de 6 dígitos a:</p>
+                    <p style="font-weight: 600;" id="verifyEmailDisplay"></p>
+                </div>
+                <div class="form-group">
+                    <label>Código de verificación</label>
+                    <input type="text" id="verifyCode" placeholder="123456" maxlength="6" pattern="[0-9]{6}" required oninput="hideError()">
+                </div>
+                <button type="submit" class="btn btn-primary">Verificar</button>
+                <button type="button" class="btn btn-secondary" onclick="resendVerificationCode()">Reenviar código</button>
+                <button type="button" class="btn btn-secondary" onclick="backToRegister()">Volver</button>
             </form>
         </div>
 
@@ -739,16 +823,18 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            document.getElementById('registerForm').addEventListener('submit', handleRegister);
+            document.getElementById('verifyForm').addEventListener('submit', handleVerification);
         });
 
         async function handleLogin(e) {
             e.preventDefault();
             
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
 
             try {
-                const response = await fetch(API_BASE + 'auth.php', {
+                const response = await fetch(API_BASE + 'auth_register.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -835,7 +921,9 @@
                 
                 if (receta.receta_image && receta.receta_image.trim() !== '') {
                     const img = document.createElement('img');
-                    img.src = receta.receta_image;
+                    // Agregar timestamp para evitar caché
+                    const separator = receta.receta_image.includes('?') ? '&' : '?';
+                    img.src = receta.receta_image + separator + 'v=' + Date.now();
                     img.alt = cleanName;
                     img.addEventListener('error', () => {
                         img.remove(); // Deja solo el fondo gris
@@ -923,7 +1011,10 @@
             // Mostrar imagen
             const imageContainer = document.getElementById('detailRecipeImage');
             if (receta.receta_image && receta.receta_image.trim() !== '') {
-                imageContainer.innerHTML = `<img src="${receta.receta_image}" alt="${receta.receta_nombre}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">`;
+                // Agregar timestamp para evitar caché
+                const separator = receta.receta_image.includes('?') ? '&' : '?';
+                const imageUrl = receta.receta_image + separator + 'v=' + Date.now();
+                imageContainer.innerHTML = `<img src="${imageUrl}" alt="${receta.receta_nombre}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">`;
             } else {
                 imageContainer.innerHTML = '<div style="width: 100%; height: 200px; background: #f3f4f6; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #6b7280;">Sin imagen</div>';
             }
@@ -1081,6 +1172,7 @@
             // Crear preview
             const reader = new FileReader();
             reader.onload = function(e) {
+                // Mostrar preview inmediatamente
                 renderNewImageUploader(e.target.result);
                 document.getElementById('newImageUrl').value = e.target.result;
             };
@@ -1313,6 +1405,7 @@
             
             const reader = new FileReader();
             reader.onload = function(e) {
+                // Mostrar preview inmediatamente con timestamp para evitar caché
                 renderEditImageUploader(e.target.result);
                 document.getElementById('editImageUrl').value = e.target.result;
             };
@@ -1347,9 +1440,16 @@
             const container = document.getElementById('editImageContainer');
             
             if (imageUrl && imageUrl.trim() !== '') {
+                // Agregar timestamp para evitar caché si es una URL externa
+                let displayUrl = imageUrl;
+                if (imageUrl.startsWith('http') && !imageUrl.includes('?v=')) {
+                    const separator = imageUrl.includes('?') ? '&' : '?';
+                    displayUrl = imageUrl + separator + 'v=' + Date.now();
+                }
+                
                 container.innerHTML = `
                     <div class="image-preview-container">
-                        <img src="${imageUrl}" alt="Vista previa" class="image-preview-img">
+                        <img src="${displayUrl}" alt="Vista previa" class="image-preview-img">
                         <button type="button" onclick="event.stopPropagation(); removeEditImage()" class="image-remove-btn" title="Eliminar imagen">✕</button>
                     </div>
                     <div style="margin-top: 10px; text-align: center;">
@@ -1766,12 +1866,33 @@
             document.getElementById('filtersPanel').classList.remove('hidden');
             document.getElementById('recipesContainer').classList.remove('hidden');
             document.getElementById('userName').textContent = currentUser.nombre;
+            hideError(); // Ocultar cualquier error del login
             loadRecipes();
         }
 
-        function showError(msg) {
-            document.getElementById('error').textContent = msg;
-            document.getElementById('error').classList.remove('hidden');
+        function showError(msg, isError = true) {
+            const errorElement = document.getElementById('error');
+            errorElement.textContent = msg;
+            errorElement.classList.remove('hidden');
+            
+            // Cambiar color según el tipo de mensaje
+            if (isError) {
+                errorElement.style.background = '#fee2e2';
+                errorElement.style.color = '#dc2626';
+            } else {
+                errorElement.style.background = '#d1fae5';
+                errorElement.style.color = '#065f46';
+            }
+            
+            // Auto-ocultar todos los mensajes después de 5 segundos
+            setTimeout(() => {
+                errorElement.classList.add('hidden');
+            }, 5000);
+        }
+
+        function hideError() {
+            const errorElement = document.getElementById('error');
+            errorElement.classList.add('hidden');
         }
 
         function logout() {
@@ -1781,6 +1902,139 @@
             document.getElementById('filtersPanel').classList.add('hidden');
             document.getElementById('recipesContainer').classList.add('hidden');
             document.getElementById('loginContainer').classList.remove('hidden');
+            showLoginForm(); // Volver al formulario de login
+        }
+
+        // ===== FUNCIONES DE AUTENTICACIÓN =====
+
+        function showLoginForm() {
+            document.getElementById('loginTab').classList.add('active');
+            document.getElementById('registerTab').classList.remove('active');
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('verifyForm').classList.add('hidden');
+            hideError(); // Ocultar errores al cambiar pestaña
+        }
+
+        function showRegisterForm() {
+            document.getElementById('loginTab').classList.remove('active');
+            document.getElementById('registerTab').classList.add('active');
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.remove('hidden');
+            document.getElementById('verifyForm').classList.add('hidden');
+            hideError(); // Ocultar errores al cambiar pestaña
+        }
+
+        function showVerifyForm(email) {
+            document.getElementById('verifyEmailDisplay').textContent = email;
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('verifyForm').classList.remove('hidden');
+        }
+
+        async function handleRegister(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('registerName').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const passwordConfirm = document.getElementById('registerPasswordConfirm').value;
+
+            // Validaciones
+            if (password !== passwordConfirm) {
+                showError('Las contraseñas no coinciden');
+                return;
+            }
+
+            if (password.length < 6) {
+                showError('La contraseña debe tener al menos 6 caracteres');
+                return;
+            }
+
+            try {
+                const response = await fetch(API_BASE + 'auth_register.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'register',
+                        name: name,
+                        email: email,
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    showVerifyForm(email);
+                    showError('📧 Código de verificación enviado a tu email', false);
+                } else {
+                    showError(data.error || 'Error en el registro');
+                }
+            } catch (error) {
+                showError('Error de conexión: ' + error.message);
+            }
+        }
+
+        async function handleVerification(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('verifyEmailDisplay').textContent;
+            const code = document.getElementById('verifyCode').value;
+
+            try {
+                const response = await fetch(API_BASE + 'auth_register.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'verify',
+                        email: email,
+                        code: code
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    showError('✅ Email verificado correctamente. Ya puedes iniciar sesión.', false);
+                    showLoginForm();
+                    // Pre-llenar el email en el login
+                    document.getElementById('loginEmail').value = email;
+                } else {
+                    showError(data.error || 'Código de verificación inválido');
+                }
+            } catch (error) {
+                showError('Error de conexión: ' + error.message);
+            }
+        }
+
+        async function resendVerificationCode() {
+            const email = document.getElementById('verifyEmailDisplay').textContent;
+            
+            try {
+                const response = await fetch(API_BASE + 'auth_register.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'resend_code',
+                        email: email
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    showError('📧 Nuevo código enviado a tu email', false);
+                } else {
+                    showError(data.error || 'Error al reenviar código');
+                }
+            } catch (error) {
+                showError('Error de conexión: ' + error.message);
+            }
+        }
+
+        function backToRegister() {
+            showRegisterForm();
         }
     </script>
 
