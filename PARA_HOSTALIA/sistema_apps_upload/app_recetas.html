@@ -169,15 +169,20 @@
             padding-top: 129px; /* Ajustado para header y filtros más grandes */
             padding-bottom: 2rem;
         }
+
+        /* Content cuando está en login (sin header visible) */
+        .content.login-mode {
+            padding-top: 1rem; /* Mucho menos espacio arriba en login */
+        }
         
         /* Login */
         .login-container {
             max-width: 400px;
-            margin: 2rem auto;
+            margin: 0.5rem auto; /* Reducido de 2rem a 0.5rem */
             padding: 2rem;
-            background: white;
+            background: #f8f9fa; /* Mismo color que el fondo general */
             border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: none; /* Eliminada la sombra para integración */
         }
         
         .form-group {
@@ -730,7 +735,7 @@
     </div>
 
     <!-- Content -->
-    <div class="content">
+    <div class="content login-mode" id="mainContent">
         <!-- Login/Register -->
         <div class="login-container" id="loginContainer">
             <div style="text-align: center; margin-bottom: 2rem;">
@@ -755,6 +760,9 @@
                     <input type="password" id="loginPassword" required oninput="hideError()">
                 </div>
                 <button type="submit" class="btn btn-primary">Entrar</button>
+                <button type="button" class="btn btn-secondary" onclick="clearSavedCredentials()" style="margin-top: 0.5rem; font-size: 0.8rem; padding: 0.5rem;">
+                    🗑️ Limpiar credenciales guardadas
+                </button>
             </form>
 
             <!-- Formulario de Registro -->
@@ -825,6 +833,9 @@
             document.getElementById('loginForm').addEventListener('submit', handleLogin);
             document.getElementById('registerForm').addEventListener('submit', handleRegister);
             document.getElementById('verifyForm').addEventListener('submit', handleVerification);
+            
+            // Cargar credenciales guardadas al iniciar
+            loadSavedCredentials();
         });
 
         async function handleLogin(e) {
@@ -849,6 +860,10 @@
                 if (data.success) {
                     currentUser = data.data.user;
                     currentToken = data.data.token;
+                    
+                    // Guardar credenciales para próximos logins
+                    saveCredentials(email, password);
+                    
                     showRecipes();
                 } else {
                     showError(data.error || 'Error de login');
@@ -1866,6 +1881,10 @@
             document.getElementById('filtersPanel').classList.remove('hidden');
             document.getElementById('recipesContainer').classList.remove('hidden');
             document.getElementById('userName').textContent = currentUser.nombre;
+            
+            // Cambiar a modo aplicación (quitar login-mode)
+            document.getElementById('mainContent').classList.remove('login-mode');
+            
             hideError(); // Ocultar cualquier error del login
             loadRecipes();
         }
@@ -1902,6 +1921,10 @@
             document.getElementById('filtersPanel').classList.add('hidden');
             document.getElementById('recipesContainer').classList.add('hidden');
             document.getElementById('loginContainer').classList.remove('hidden');
+            
+            // Volver a modo login (con menos padding)
+            document.getElementById('mainContent').classList.add('login-mode');
+            
             showLoginForm(); // Volver al formulario de login
         }
 
@@ -2035,6 +2058,67 @@
 
         function backToRegister() {
             showRegisterForm();
+        }
+
+        // ===== FUNCIONES PARA RECORDAR CREDENCIALES =====
+        
+        function loadSavedCredentials() {
+            try {
+                const savedEmail = localStorage.getItem('misrecetas_email');
+                const savedPassword = localStorage.getItem('misrecetas_password');
+                
+                if (savedEmail) {
+                    document.getElementById('loginEmail').value = savedEmail;
+                }
+                
+                if (savedPassword) {
+                    document.getElementById('loginPassword').value = savedPassword;
+                }
+                
+                // Si hay credenciales guardadas, mostrar indicador
+                if (savedEmail && savedPassword) {
+                    const loginForm = document.getElementById('loginForm');
+                    const indicator = document.createElement('p');
+                    indicator.id = 'savedCredentialsIndicator';
+                    indicator.style.cssText = 'font-size: 0.8rem; color: #22c55e; text-align: center; margin-top: 0.5rem;';
+                    indicator.innerHTML = '✅ Credenciales guardadas';
+                    loginForm.appendChild(indicator);
+                }
+            } catch (error) {
+                console.log('Error cargando credenciales:', error);
+            }
+        }
+        
+        function saveCredentials(email, password) {
+            try {
+                localStorage.setItem('misrecetas_email', email);
+                localStorage.setItem('misrecetas_password', password);
+            } catch (error) {
+                console.log('Error guardando credenciales:', error);
+            }
+        }
+        
+        function clearSavedCredentials() {
+            try {
+                localStorage.removeItem('misrecetas_email');
+                localStorage.removeItem('misrecetas_password');
+                
+                // Limpiar campos del formulario
+                document.getElementById('loginEmail').value = '';
+                document.getElementById('loginPassword').value = '';
+                
+                // Eliminar indicador si existe
+                const indicator = document.getElementById('savedCredentialsIndicator');
+                if (indicator) {
+                    indicator.remove();
+                }
+                
+                // Mostrar confirmación
+                showError('🗑️ Credenciales eliminadas', false);
+                
+            } catch (error) {
+                console.log('Error eliminando credenciales:', error);
+            }
         }
     </script>
 
