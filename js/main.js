@@ -737,7 +737,7 @@ function setNewRating(rating) {
     });
     
     // Validar rating
-    const validRating = Math.max(1, Math.min(5, parseInt(rating) || 5));
+    const validRating = Math.max(0, Math.min(5, parseInt(rating) || 5));
     
     // Activar las estrellas hasta el rating seleccionado
     for (let i = 1; i <= validRating; i++) {
@@ -793,7 +793,7 @@ function setEditRating(rating) {
     });
     
     // Validar rating
-    const validRating = Math.max(1, Math.min(5, parseInt(rating) || 5));
+    const validRating = Math.max(0, Math.min(5, parseInt(rating) || 5));
     
     // Activar las estrellas hasta el rating seleccionado
     for (let i = 1; i <= validRating; i++) {

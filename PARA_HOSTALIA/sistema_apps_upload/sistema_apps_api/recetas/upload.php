@@ -123,7 +123,7 @@ try {
 function uploadToHostalia($fileTmpName, $userKey, $subFolder, $fileName) {
     // Subir archivo usando cURL al script receptor en Hostalia
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, "https://colisan.com/sistema_apps_upload/recetas/upload_handler.php");
+    curl_setopt($ch, CURLOPT_URL, "https://colisan.com/sistema_apps_upload/sistema_apps_upload_media/recetas/upload_handler.php");
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, [
         'user_key' => $userKey,

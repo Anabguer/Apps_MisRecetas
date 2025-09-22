@@ -92,7 +92,7 @@ $targetFile = $targetDir . '/' . $fileName;
 
 if (move_uploaded_file($file['tmp_name'], $targetFile)) {
     // Generar URL pública
-    $publicUrl = 'https://colisan/sistema_apps_upload/' . $userKey . '/' . $subFolder . '/' . $fileName;
+    $publicUrl = 'https://colisan/sistema_apps_upload/sistema_apps_upload_media/' . $userKey . '/' . $subFolder . '/' . $fileName;
     
     echo json_encode([
         'success' => true,

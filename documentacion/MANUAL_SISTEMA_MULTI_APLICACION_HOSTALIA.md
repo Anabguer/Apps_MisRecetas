@@ -127,7 +127,7 @@ CREATE TABLE puzzle_datos (
 ```bash
 # En FileZilla o panel de control:
 sistema_apps_upload/sistema_apps_api/puzzle/
-sistema_apps_upload/sistema_apps_upload/puzzle/
+sistema_apps_upload/sistema_apps_upload_media/puzzle/
 ```
 
 ### **PASO 3: 🔧 CREAR CONFIG.PHP**
@@ -370,7 +370,7 @@ Router:    https://colisan.com/sistema_apps_upload/router.html?app=CODIGO
 App Web:   https://colisan.com/sistema_apps_upload/app_CODIGO.html
 API Auth:  https://colisan.com/sistema_apps_upload/sistema_apps_api/CODIGO/auth.php
 API List:  https://colisan.com/sistema_apps_upload/sistema_apps_api/CODIGO/list.php
-Uploads:   https://colisan.com/sistema_apps_upload/sistema_apps_upload/CODIGO/
+Uploads:   https://colisan.com/sistema_apps_upload/sistema_apps_upload_media/CODIGO/
 
 EJEMPLOS ESPECÍFICOS:
 - Recetas: https://colisan.com/sistema_apps_upload/app_recetas.html

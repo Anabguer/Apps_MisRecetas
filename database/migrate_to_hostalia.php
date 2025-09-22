@@ -89,7 +89,7 @@ $estructuraTablas = [
             receta_preparation TEXT NOT NULL,
             receta_image VARCHAR(500) NULL,
             receta_video VARCHAR(500) NULL,
-            receta_valoracion TINYINT(1) DEFAULT 5 CHECK (receta_valoracion >= 1 AND receta_valoracion <= 5),
+            receta_valoracion TINYINT(1) DEFAULT 5 CHECK (receta_valoracion >= 0 AND receta_valoracion <= 5),
             receta_saludable BOOLEAN DEFAULT FALSE,
             receta_tiempopreparacion VARCHAR(50) NULL,
             receta_dificultad ENUM('Fácil', 'Medio', 'Difícil') NULL,

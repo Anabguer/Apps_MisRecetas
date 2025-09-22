@@ -120,8 +120,8 @@ class Security {
     public static function validateRating($valoracion) {
         $rating = (int)$valoracion;
         
-        if ($rating < 1 || $rating > 5) {
-            return ['valid' => false, 'error' => 'Valoración debe estar entre 1 y 5'];
+        if ($rating < 0 || $rating > 5) {
+            return ['valid' => false, 'error' => 'Valoración debe estar entre 0 y 5'];
         }
         
         return ['valid' => true, 'rating' => $rating];

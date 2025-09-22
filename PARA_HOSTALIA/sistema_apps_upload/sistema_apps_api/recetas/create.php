@@ -45,8 +45,8 @@ if (!in_array($input['tipo'], $tiposValidos)) {
 
 // Validar valoración
 $valoracion = $input['valoracion'] ?? 5;
-if ($valoracion < 1 || $valoracion > 5) {
-    errorResponse('La valoración debe ser entre 1 y 5');
+if ($valoracion < 0 || $valoracion > 5) {
+    errorResponse('La valoración debe ser entre 0 y 5');
 }
 
 try {
@@ -74,7 +74,7 @@ try {
     
     // Procesar imagen nueva si existe
     if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
-        $imageUploadDir = '../../sistema_apps_upload/recetas/images/';
+        $imageUploadDir = '../../sistema_apps_upload_media/recetas/images/';
         if (!is_dir($imageUploadDir)) {
             mkdir($imageUploadDir, 0777, true);
         }
@@ -86,13 +86,13 @@ try {
         $imagePath = $imageUploadDir . $imageName;
         
         if (move_uploaded_file($_FILES['imagen']['tmp_name'], $imagePath)) {
-            $imagenUrl = 'https://colisan.com/sistema_apps_upload/sistema_apps_upload/recetas/images/' . $imageName;
+            $imagenUrl = 'https://colisan.com/sistema_apps_upload/sistema_apps_upload_media/recetas/images/' . $imageName;
         }
     }
     
     // Procesar video nuevo si existe
     if (isset($_FILES['video']) && $_FILES['video']['error'] === UPLOAD_ERR_OK) {
-        $videoUploadDir = '../../sistema_apps_upload/recetas/videos/';
+        $videoUploadDir = '../../sistema_apps_upload_media/recetas/videos/';
         if (!is_dir($videoUploadDir)) {
             mkdir($videoUploadDir, 0777, true);
         }
@@ -104,7 +104,7 @@ try {
         $videoPath = $videoUploadDir . $videoName;
         
         if (move_uploaded_file($_FILES['video']['tmp_name'], $videoPath)) {
-            $videoUrl = 'https://colisan.com/sistema_apps_upload/sistema_apps_upload/recetas/videos/' . $videoName;
+            $videoUrl = 'https://colisan.com/sistema_apps_upload/sistema_apps_upload_media/recetas/videos/' . $videoName;
         }
     }
     
