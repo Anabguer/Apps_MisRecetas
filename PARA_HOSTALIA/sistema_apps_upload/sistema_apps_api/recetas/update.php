@@ -134,7 +134,7 @@ try {
         $imagenUrl,
         $videoUrl,
         $valoracion,
-        isset($input['saludable']) ? (bool)$input['saludable'] : false,
+        isset($input['saludable']) && $input['saludable'] ? 1 : 0,
         $input['tiempo'] ?? '',
         $input['dificultad'] ?? 'Fácil',
         $input['porciones'] ?? '',
