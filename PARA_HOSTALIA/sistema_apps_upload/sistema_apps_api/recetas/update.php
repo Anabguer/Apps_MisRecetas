@@ -46,7 +46,7 @@ if (!in_array($input['tipo'], $tiposValidos)) {
 }
 
 // Validar valoración
-$valoracion = $input['valoracion'] ?? 5;
+$valoracion = isset($input['valoracion']) ? (int)$input['valoracion'] : 5;
 if ($valoracion < 0 || $valoracion > 5) {
     errorResponse('La valoración debe ser entre 0 y 5');
 }
@@ -64,14 +64,14 @@ try {
         errorResponse('Receta no encontrada o no tienes permisos', 404);
     }
     
-    // Manejar archivos subidos
-    $imagenUrl = $input['imagen_url'] ?? '';  // URL existente por defecto
-    $videoUrl = $input['video_url'] ?? '';    // URL existente por defecto
-    
     // Limpiar nombre de receta para usar en archivo
     $nombreLimpio = preg_replace('/[^a-zA-Z0-9áéíóúñÁÉÍÓÚÑ\s]/', '', $input['nombre']);
     $nombreLimpio = preg_replace('/\s+/', '-', trim($nombreLimpio));
     $nombreLimpio = strtolower($nombreLimpio);
+    
+    // Inicializar URLs con valores existentes
+    $imagenUrl = $input['imagen'] ?? '';
+    $videoUrl = $input['enlace_video'] ?? '';
     
     // Procesar imagen nueva si existe
     if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
@@ -157,7 +157,12 @@ try {
     }
     
 } catch (Exception $e) {
-    logDebug("Error actualizando receta", ['error' => $e->getMessage()]);
-    errorResponse('Error al actualizar receta', 500);
+    logDebug("Error actualizando receta", [
+        'error' => $e->getMessage(),
+        'file' => $e->getFile(),
+        'line' => $e->getLine(),
+        'trace' => $e->getTraceAsString()
+    ]);
+    errorResponse('Error al actualizar receta: ' . $e->getMessage(), 500);
 }
 ?>

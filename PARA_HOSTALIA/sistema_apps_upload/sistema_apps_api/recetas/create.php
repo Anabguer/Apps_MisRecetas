@@ -44,7 +44,7 @@ if (!in_array($input['tipo'], $tiposValidos)) {
 }
 
 // Validar valoración
-$valoracion = $input['valoracion'] ?? 5;
+$valoracion = isset($input['valoracion']) ? (int)$input['valoracion'] : 5;
 if ($valoracion < 0 || $valoracion > 5) {
     errorResponse('La valoración debe ser entre 0 y 5');
 }
@@ -63,14 +63,14 @@ try {
         errorResponse('Usuario no encontrado', 404);
     }
     
-    // Manejar archivos subidos (IGUAL QUE UPDATE.PHP)
-    $imagenUrl = '';
-    $videoUrl = '';
-    
     // Limpiar nombre de receta para usar en archivo
     $nombreLimpio = preg_replace('/[^a-zA-Z0-9áéíóúñÁÉÍÓÚÑ\s]/', '', $input['nombre']);
     $nombreLimpio = preg_replace('/\s+/', '-', trim($nombreLimpio));
     $nombreLimpio = strtolower($nombreLimpio);
+    
+    // Inicializar URLs
+    $imagenUrl = '';
+    $videoUrl = '';
     
     // Procesar imagen nueva si existe
     if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
