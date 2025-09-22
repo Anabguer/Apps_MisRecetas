@@ -52,15 +52,16 @@ if ($valoracion < 0 || $valoracion > 5) {
 }
 
 try {
-    // Verificar que la receta existe y pertenece al usuario
+    // Verificar que la receta existe y pertenece al usuario, y obtener datos actuales
     $stmt = $pdo->prepare("
-        SELECT receta_id 
+        SELECT receta_id, receta_image, receta_video 
         FROM recetas 
         WHERE receta_id = ? AND usuario_aplicacion_key = ?
     ");
     $stmt->execute([$recipeId, $usuario_aplicacion_key]);
+    $currentRecipe = $stmt->fetch();
     
-    if (!$stmt->fetch()) {
+    if (!$currentRecipe) {
         errorResponse('Receta no encontrada o no tienes permisos', 404);
     }
     
@@ -69,9 +70,9 @@ try {
     $nombreLimpio = preg_replace('/\s+/', '-', trim($nombreLimpio));
     $nombreLimpio = strtolower($nombreLimpio);
     
-    // Inicializar URLs con valores existentes
-    $imagenUrl = $input['imagen'] ?? '';
-    $videoUrl = $input['enlace_video'] ?? '';
+    // Inicializar URLs con valores existentes de la base de datos
+    $imagenUrl = $currentRecipe['receta_image'] ?? '';
+    $videoUrl = $currentRecipe['receta_video'] ?? '';
     
     // Procesar imagen nueva si existe
     if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
